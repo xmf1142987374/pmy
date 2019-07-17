@@ -1,3 +1,7 @@
+
+//用户管理界面
+
+
 Ext.define("mf.three",{
     extend:Ext.grid.Panel,
     id:"mf",
@@ -9,10 +13,10 @@ Ext.define("mf.three",{
 
 
         var store=new Ext.data.Store({
-            fields:["userid","username","password"],
+            fields:["userid","uname","user_dept","username","user_sex","user_tel","user_phone","user_state"],
             proxy:{
                 type:"ajax",
-                url:"hq",
+                url:"seluser",
                 reader:{
                     type:"json",
                     totalProperty:"totalCount",
@@ -96,32 +100,44 @@ Ext.define("mf.three",{
                 sortable:true
             },{
                 text:"姓名",
-                dataIndex:"username",
+                dataIndex:"uname",
                 align:"center",
                 flex:3,
                 sortable:true
             },{
                 text:"部门",
                 align:"center",
+                dataIndex:"user_dept",
+                flex:3,
+                sortable:true
+            },{
+                text:"登录账户",
+                align:"center",
+                dataIndex:"username",
                 flex:3,
                 sortable:true
             },{
                 text:"性别",
+                align:"center",
+                dataIndex:"user_sex",
                 flex:1,
                 sortable:true
             },{
                 text:"电话",
                 align:"center",
+                dataIndex:"user_tel",
                 flex:3,
                 sortable:true
             },{
                 text:"手机号",
                 align:"center",
+                dataIndex:"user_phone",
                 flex:3,
                 sortable:true
             },{
                 text:"状态",
                 align:"center",
+                dataIndex:"user_state",
                 flex:1,
                 sortable:true
             },{

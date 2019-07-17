@@ -8,103 +8,104 @@
 </head>
 <script type="text/javascript">
     Ext.onReady(function () {
-        var store=new Ext.data.Store({
-            fields:["userid","username","password"],
+
+        var pages = 4;   // 设置你想要的每页显示条数
+
+        var store = Ext.create('Ext.data.Store', {
+            autoLoad:false,
+            fields:["sets_id","site_type","valid_time","log_cycle","log_count","valid_start_time","valid_end_time"],
+            pageSize: pages, // 每页显示条数
             proxy:{
                 type:"ajax",
-                url:"hq",
+                url:"selkqsetsss",
                 reader:{
                     type:"json",
                     totalProperty:"totalCount",
                     root:"data"
                 }
-            },
-            autoLoad:true
-        })
-        var bg=new Ext.grid.Panel({
-            width:1200,
-            height:600,
-            renderTo:Ext.getBody(),
-            border:false,
-            frame:true,
-            tbar:[{
-                text:"添加",
-                icon:"img/16.png"
-            },{
-                text:"修改",
-                icon:"img/50.png"
-            },{
-                text:"导出Excel",
-                icon:"img/51.png"
-            },{
-                text:"删除",
-                icon:"img/15.png"
-            },{
-                text:"修改密码",
-                icon:"img/56.png"
-            },{
-                text:"刷新",
-                icon:"img/57.png"
-            },"-","->",{
-                xtype:"textfield",
-                labelAlign: "right",
-                width:200,
-                fieldLabel:"姓名"
-            },{
-                xtype:"textfield",
-                labelAlign: "right",
-                width:200,
-                fieldLabel:"登录账户"
-            },{
-                xtype:"combo",
-                labelAlign: "right",
-                width:150,
-                fieldLabel:"性别"
-            },{
-                text:"查询",
-                icon:"img/4.png",
-                handler:function () {
-                    alert(11);
-                }
-            }],
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 指定部分数据通过params参数来加载
+
+        store.load({
+            params:{
+                start:0,
+                limit:pages
+            }
+        });
+
+        Ext.create('Ext.grid.Panel', {
+            title: 'Simpsons',
+            store: store,
             columns:[{
-                text:"工号",
-                dataIndex:"userid",
+                text:"id",
+                dataIndex:"sets_id",
+                hidden:true
+            },{
+                text:"站点类型",
+                dataIndex:"site_type",
+                align:"center",
+                flex:2,
                 sortable:true
             },{
-                text:"用户名",
-                dataIndex:"username",
+                text:"有效时长(分钟)",
+                dataIndex:"valid_time",
+                align:"center",
+                flex:3,
                 sortable:true
             },{
-                text:"密码",
-                dataIndex:"password",
+                text:"周期",
+                align:"center",
+                dataIndex:"log_cycle",
+                flex:1,
                 sortable:true
             },{
-                text:"操作",
-                xtype:"actioncolumn",
-                items:[{
-                    icon:"img/55.png",
-                    text:"查看明细"
-                },{
-                    icon:"img/52.png",
-                    dataIndex:"角色"
-                },{
-                    icon:"img/54.png",
-                    dataIndex:"数据权限"
-                }]
+                text:"次数",
+                align:"center",
+                dataIndex:"log_count",
+                flex:1,
+                sortable:true
+            },{
+                text:"规则有效期间_开始",
+                align:"center",
+                dataIndex:"valid_start_time",
+                flex:4,
+                sortable:true
+            },{
+                text:"规则有效期间_结束",
+                align:"center",
+                dataIndex:"valid_end_time",
+                flex:4,
+                sortable:true
             }],
+            width: 1200,
+            height: 600,
             bbar:new Ext.PagingToolbar({
-                pageSize:20,
+                store:store,
                 displayInfo:true,
-                displayMsg:"当前显示第{0}到{1}条记录,共有2条记录",
+                 displayMsg:"当前显示第{0}到{1}条记录,共有{1}条记录",
                 emptyMsg:"无记录"
             }),
-            store:store
+            renderTo: Ext.getBody()
         });
 
     })
 </script>
 <body>
-
 </body>
 </html>

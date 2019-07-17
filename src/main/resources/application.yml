@@ -4,14 +4,14 @@ spring:
     cache: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/xmf?serverTimezone=GMT%2B8&useSSL=false&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/pmy?serverTimezone=GMT%2B8&useSSL=false&characterEncoding=utf-8
     username: root
     password: root
   jpa:
     show-sql: true
     database: mysql
     hibernate:
-      ddl-auto: update
+      #ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: false
 server:

@@ -14,7 +14,7 @@ Ext.onReady(function () {
                 title:"菜单栏",
                 width:250,
                 height:600,
-                renderTo:"zuo",
+                // renderTo:"zuo",
                 collapsible:true,
                 layout:"accordion",
             items:[{
@@ -76,16 +76,47 @@ Ext.onReady(function () {
                             itemclick:function (tree,cor) {
                                 var id = cor.raw;
                                 var tabpanel = Ext.getCmp("tabpanel");
+
                                 if (Ext.getCmp(id.id)) {
                                     tabpanel.setActiveTab(Ext.getCmp(id.id));
                                 } else {
-                                    var t = tabpanel.add({
-                                        title: id.text,
-                                        closable: true,
-                                        id: id.id,
-                                        html: id.text + "页面",
-                                        // items:[new mf.three()]
-                                    });
+                                    switch (id.id) {
+                                        case "5":
+                                            var t=tabpanel.add({
+                                                title:id.text,
+                                                closable:true,
+                                                id:id.id,
+                                                layout:"fit",
+                                                items:[new xw.kqgz()]
+
+                                            });
+                                            break;
+                                        case "6":
+                                            var t=tabpanel.add({
+                                                title:id.text,
+                                                closable:true,
+                                                id:id.id,
+                                                layout:"fit",
+                                                items:[new xw.xwkq()]
+                                            });
+                                            break;
+                                        case "7":
+                                            var t=tabpanel.add({
+                                                title:id.text,
+                                                closable:true,
+                                                id:id.id,
+                                                html:id.text+"页面"
+                                            });
+                                            break;
+                                        case "8":
+                                            var t=tabpanel.add({
+                                                title:id.text,
+                                                closable:true,
+                                                id:id.id,
+                                                html:id.text+"页面"
+                                            });
+                                            break;
+                                    }
                                     tabpanel.setActiveTab(t);
                                 }
                             }
@@ -380,8 +411,8 @@ Ext.onReady(function () {
             items:[{
                 icon:"../img/19.png",
                 title:"主页",
-                html:"啥都没有",
-                closable:true
+                html:"<iframe src='html/map.html' width='100%' height='100%'></iframe>"
+                // closable:true
             }]
         },{
             region:"south",
