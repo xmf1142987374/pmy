@@ -7,10 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -49,5 +52,16 @@ public class UserController {
             mav.setViewName("redirect:/");
         }
         return mav;
+    }
+
+    //ajax请求添加用户
+    @ResponseBody
+    @RequestMapping("adduser")
+    public void addUser(@RequestParam("user_id") String user_id, @RequestParam("user_name") String user_name, @RequestParam("user_password") String user_password,@RequestParam("user_login_name") String user_login_name,@RequestParam("user_department") String user_department,@RequestParam("user_gender") String user_gender,@RequestParam("user_tel") String user_tel,@RequestParam("user_phone") String user_phone){
+        Date date =new Date();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String userDate=sdf.format(date);
+        User user=new User(user_id,user_name,user_password,user_login_name,user_department,user_gender,user_tel,user_phone,"正常",userDate);
+        userService.addUser(user);
     }
 }

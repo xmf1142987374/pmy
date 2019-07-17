@@ -44,11 +44,99 @@ Ext.define("mf.three",{
                 //xbvalue:"2"
             }]
         });
-
+        //界面
         Ext.apply(this,{
             tbar:[{
                 text:"添加",
-                icon:"img/16.png"
+                icon:"img/16.png",
+                handler:function(){
+                    var win=new Ext.Window({
+                        title:'添加用户',
+                        width:300,
+                        height:300,
+                        frame:true
+                    });
+                    var form= new Ext.panel.Panel({
+                        border:false,
+                        frame:true,
+                        layout:"form",
+                        items:[{
+                            xtype:"textfield",
+                            id:"gh",
+                            fieldLabel:"工号"
+                        },{
+                            xtype:"textfield",
+                            id:"name",
+                            fieldLabel:"姓名"
+                        },{
+                            xtype:"textfield",
+                            id:"password",
+                            fieldLabel:"密码"
+                        },{
+                            xtype:"textfield",
+                            id:"loginName",
+                            fieldLabel:"登录账号"
+                        },{
+                            xtype:"textfield",
+                            id:"bm",
+                            fieldLabel:"部门"
+                        },{
+                            xtype:"textfield",
+                            id:"sex",
+                            fieldLabel:"性别"
+                        },{
+                            xtype:"textfield",
+                            id:"tel",
+                            fieldLabel:"电话"
+                        },{
+                            xtype:"textfield",
+                            id:"phone",
+                            fieldLabel:"手机号"
+                        }],
+                        buttons:[{
+                            text:'添加',
+                            handler:function () {
+                                var user_id=Ext.getCmp("gh").value;
+                                var user_name=Ext.getCmp("name").value;
+                                var user_password=Ext.getCmp("password").value;
+                                var user_login_name=Ext.getCmp("loginName").value;
+                                var user_department=Ext.getCmp("bm").value;
+                                var user_gender=Ext.getCmp("sex").value;
+                                var user_tel=Ext.getCmp("tel").value;
+                                var user_phone=Ext.getCmp("phone").value;
+                                Ext.Ajax.request({
+                                    url:"adduser",
+                                    type:"post",
+                                    success:function(){
+                                        alert("成功");
+                                        store.load();
+                                        win.close();
+                                    },
+                                    failure:function(){
+                                        alert("失败");
+                                    },
+                                    params:{
+                                        user_id : user_id,
+                                        user_name : user_name,
+                                        user_password : user_password,
+                                        user_login_name : user_login_name,
+                                        user_department : user_department,
+                                        user_gender : user_gender,
+                                        user_tel : user_tel,
+                                        user_phone : user_phone
+                                    }
+                                })
+                            }
+                        },{
+                            text:"取消",
+                            handler:function(){
+                                win.close();
+                            }
+                        }]
+                    })
+                    win.add(form);
+                    win.show();
+                }
             },{
                 text:"修改",
                 icon:"img/50.png"
@@ -143,7 +231,7 @@ Ext.define("mf.three",{
             },{
                 text:"操作",
                 align:"center",
-                flex:4,
+                flex:5,
                 xtype:"actioncolumn",
                 items:[{
                     icon:"img/55.png",

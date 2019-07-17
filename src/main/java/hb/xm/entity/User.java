@@ -32,13 +32,24 @@ public class User {
     @Column(name = "USER_ROLE_ID")
     private String role_id;//角色id
     @Column(name = "CREATE_TIME")
-    private String create_time;//角色id
+    private String create_time;//创建角色时间
 
 
     public User() {
     }
 
-
+    public User(String userid, String uname, String username, String password, String user_dept, String user_sex, String user_tel, String user_phone, String user_state,  String create_time) {
+        this.userid = userid;
+        this.uname = uname;
+        this.username = username;
+        this.password = password;
+        this.user_dept = user_dept;
+        this.user_sex = user_sex;
+        this.user_tel = user_tel;
+        this.user_phone = user_phone;
+        this.user_state = user_state;
+        this.create_time = create_time;
+    }
 
     public String getUserid() {
         return userid;

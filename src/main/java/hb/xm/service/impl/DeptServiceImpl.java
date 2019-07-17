@@ -1,0 +1,26 @@
+package hb.xm.service.impl;
+
+import hb.xm.dao.DeptDao;
+import hb.xm.entity.Dept;
+import hb.xm.service.DeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class DeptServiceImpl implements DeptService {
+
+    @Autowired
+    private DeptDao deptDao;
+
+    @Override
+    public List<Dept> getDept() {
+        return deptDao.findAll();
+    }
+
+    @Override
+    public void addDept(Dept dept) {
+        deptDao.save(dept);
+    }
+}
