@@ -88,7 +88,6 @@ Ext.onReady(function () {
                                                 id:id.id,
                                                 layout:"fit",
                                                 items:[new xw.kqgz()]
-
                                             });
                                             break;
                                         case "6":
@@ -104,16 +103,16 @@ Ext.onReady(function () {
                                             var t=tabpanel.add({
                                                 title:id.text,
                                                 closable:true,
-                                                id:id.id,
-                                                html:id.text+"页面"
+                                                layout:"fit",
+                                                items:[new xw.xjgz()]
                                             });
                                             break;
                                         case "8":
                                             var t=tabpanel.add({
                                                 title:id.text,
                                                 closable:true,
-                                                id:id.id,
-                                                html:id.text+"页面"
+                                                layout:"fit",
+                                                items:[new xw.gdgl()]
                                             });
                                             break;
                                     }
@@ -251,13 +250,25 @@ Ext.onReady(function () {
                                 if (Ext.getCmp(id.id)) {
                                     tabpanel.setActiveTab(Ext.getCmp(id.id));
                                 }else {
-                                    var t=tabpanel.add({
-                                        title:id.text,
-                                        closable:true,
-                                        id:id.id,
-                                        html:id.text+"页面",
-                                        // items:[new mf.three()]
-                                    });
+                                    switch (id.id) {
+                                        case "17":
+                                            var t=tabpanel.add({
+                                                title:id.text,
+                                                closable:true,
+                                                id:id.id,
+                                                layout:"fit",
+                                                items:[new gjgl.gjlb()]
+                                            });
+                                            break;
+                                        case "18":
+                                            var t=tabpanel.add({
+                                                title:id.text,
+                                                closable:true,
+                                                layout:"fit",
+                                                items:[new gjgl.ycsjhzb()]
+                                            });
+                                            break;
+                                    }
                                     tabpanel.setActiveTab(t);
                                 }
                             }
