@@ -1,8 +1,10 @@
 package hb.xm.controller;
 //请求考勤规则
 import hb.xm.entity.Site;
+import hb.xm.entity.User;
 import hb.xm.entity.Xwkq;
 import hb.xm.service.SiteService;
+import hb.xm.service.UserService;
 import hb.xm.service.XwkqService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -21,6 +23,8 @@ public class XwkqController {
     private XwkqService xwkqService;
     @Autowired
     private SiteService siteService;
+    @Autowired
+    private UserService userService;
 
     //ajax请求查询站点名
     @ResponseBody
@@ -45,13 +49,25 @@ public class XwkqController {
     @RequestMapping("selXwkq")
     public String selXwkq(@RequestParam("start")Integer start, @RequestParam("limit") Integer limit){
         List<Site> sites=siteService.getSiteAreas();
+        List<User> users=userService.getUsers();
         List<Xwkq> xwkqs=xwkqService.getXwkqfy(start,limit);
         JSONArray data= new JSONArray();
         for (int i = 0; i <xwkqs.size() ; i++) {
             JSONObject jsonObject=new JSONObject();
             jsonObject=JSONObject.fromObject(xwkqs.get(i));
-            jsonObject.put("site_location",sites.get(i).getSite_location());
-            jsonObject.put("site_name",sites.get(i).getSite_name());
+            for(Site site:sites){
+                if(site.getSite_id().toString().equals(xwkqs.get(i).getSite_id().toString())){
+                    jsonObject.put("site_location",site.getSite_location());
+                    jsonObject.put("site_name",site.getSite_name());
+                }
+            }
+
+            for (User user:users){
+                if (user.getUserid().toString().equals(xwkqs.get(i).getUser_id().toString())){
+                    jsonObject.put("uname",user.getUname());
+                }
+
+            }
             data.add(jsonObject);
         }
         String datas="{totalCount:"+xwkqService.getXwkq().size()+",data:"+data.toString()+"}";

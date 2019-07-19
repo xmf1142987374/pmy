@@ -13,7 +13,7 @@ Ext.define("xw.xwkq",{
         var pages = 3;   // 设置你想要的每页显示条数
         var store= Ext.create('Ext.data.Store', {
             id:"xwkq",
-            fields:["site_location","site_name","","arrive_time","leave_time","is_vaild"],
+            fields:["site_location","site_name","uname","arrive_time","leave_time","is_vaild"],
             proxy:{
                 type:"ajax",
                 url:"selXwkq",
@@ -127,7 +127,7 @@ Ext.define("xw.xwkq",{
             },{
                 text:"人员",
                 align:"center",
-                dataIndex:"",
+                dataIndex:"uname",
                 flex:2,
                 sortable:true
             },{
