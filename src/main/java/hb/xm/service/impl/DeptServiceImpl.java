@@ -23,4 +23,9 @@ public class DeptServiceImpl implements DeptService {
     public void addDept(Dept dept) {
         deptDao.save(dept);
     }
+
+    @Override
+    public void delectDept(Integer dep_id) {
+        deptDao.deleteById(dep_id);
+    }
 }

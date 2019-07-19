@@ -2,9 +2,9 @@
 //用户管理界面
 
 
-Ext.define("mf.bm",{
+Ext.define("mf.js",{
     extend:Ext.grid.Panel,
-    id:"bm",
+    id:"js",
     frame:true,
     // width:1350,
     // height:650,
@@ -13,10 +13,10 @@ Ext.define("mf.bm",{
 
 
         var store=new Ext.data.Store({
-            fields:["dep_id","dep_name","dep_desc","dep_state","create_user","create_time","modify_user","modify_time"],
+            fields:["role_id","role_name","role_state"],
             proxy:{
                 type:"ajax",
-                url:"seldept",
+                url:"selrole",
                 reader:{
                     type:"json",
                     totalProperty:"totalCount",
@@ -35,7 +35,7 @@ Ext.define("mf.bm",{
                 icon:"img/16.png",
                 handler:function(){
                     var win=new Ext.Window({
-                        title:'添加部门',
+                        title:'添加角色',
                         width:300,
                         height:200,
                         frame:true
@@ -47,29 +47,24 @@ Ext.define("mf.bm",{
                         items:[{
                             xtype:"textfield",
                             id:"id",
-                            fieldLabel:"部门id"
+                            fieldLabel:"角色编号"
                         },{
                             xtype:"textfield",
                             id:"name",
-                            fieldLabel:"部门名称"
-                        },{
-                            xtype:"textfield",
-                            id:"ms",
-                            fieldLabel:"部门描述"
+                            fieldLabel:"角色名称"
                         },{
                             xtype:"textfield",
                             id:"zt",
-                            fieldLabel:"部门状态"
+                            fieldLabel:"角色状态"
                         }],
                         buttons:[{
                             text:'添加',
                             handler:function () {
-                                var dep_id=Ext.getCmp("id").value;
-                                var dep_name=Ext.getCmp("name").value;
-                                var dep_desc=Ext.getCmp("ms").value;
-                                var dep_state=Ext.getCmp("zt").value;
+                                var role_id=Ext.getCmp("id").value;
+                                var role_name=Ext.getCmp("name").value;
+                                var role_state=Ext.getCmp("zt").value;
                                 Ext.Ajax.request({
-                                    url:"adddept",
+                                    url:"addrole",
                                     type:"post",
                                     success:function(){
                                         alert("成功");
@@ -80,10 +75,9 @@ Ext.define("mf.bm",{
                                         alert("失败");
                                     },
                                     params:{
-                                        dep_id : dep_id,
-                                        dep_name : dep_name,
-                                        dep_desc : dep_desc,
-                                        dep_state : dep_state,
+                                        role_id : role_id,
+                                        role_name : role_name,
+                                        role_state : role_state
                                     }
                                 })
                             }
@@ -102,29 +96,7 @@ Ext.define("mf.bm",{
                 icon:"img/50.png"
             },{
                 text:"删除",
-                icon:"img/15.png",
-                handler:function(){
-                    var selectdata=Ext.getCmp("bm").getSelectionModel().getSelection();
-                    var data=new Array();
-                    for (var i = 0; i <selectdata.length ; i++) {
-                        data.push(selectdata[i].data.dep_id);
-                    }
-
-                    Ext.Ajax.request({
-                        url:"deldept",
-                        type:"post",
-                        success:function(){
-                            store.load();//添加之后重载数据 局部刷新
-                            alert("删除成功");
-                        },
-                        failure:function(){
-                            alert("删除失败");
-                        },
-                        params:{
-                            data:data
-                        }
-                    })
-                }
+                icon:"img/15.png"
             },{
                 text:"导出Excel",
                 icon:"img/51.png"
@@ -134,53 +106,32 @@ Ext.define("mf.bm",{
             }],
             selType:"checkboxmodel",
             columns:[{
-                text:"部门代码",
-                dataIndex:"dep_id",
+                text:"角色编号",
+                dataIndex:"role_id",
                 align:"center",
                 flex:1,
                 sortable:true
             },{
-                text:"部门名称",
-                dataIndex:"dep_name",
+                text:"角色名称",
+                dataIndex:"role_name",
                 align:"center",
-                flex:3,
-                sortable:true
-            },{
-                text:"部门描述",
-                align:"center",
-                dataIndex:"dep_desc",
-                flex:3,
+                flex:2,
                 sortable:true
             },{
                 text:"状态",
                 align:"center",
-                dataIndex:"dep_state",
+                dataIndex:"role_state",
                 flex:1,
                 sortable:true
             },{
-                text:"创建时间",
+                text:"操作",
                 align:"center",
-                dataIndex:"create_time",
-                flex:3,
-                sortable:true
-            },{
-                text:"创建者",
-                align:"center",
-                dataIndex:"create_user",
-                flex:1,
-                sortable:true
-            },{
-                text:"修改时间",
-                align:"center",
-                dataIndex:"modify_time",
-                flex:3,
-                sortable:true
-            },{
-                text:"修改者",
-                align:"center",
-                flex:1,
-                dataIndex:"modify_user",
-                sortable:true
+                flex:2,
+                xtype:"actioncolumn",
+                items:[{
+                    icon:"img/54.png",
+                    dataIndex:"权限分配"
+                }]
             }],
             bbar:new Ext.PagingToolbar({
                 pageSize:20,

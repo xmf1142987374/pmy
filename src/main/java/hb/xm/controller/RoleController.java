@@ -1,9 +1,9 @@
 package hb.xm.controller;
 
-import hb.xm.entity.Dept;
+import hb.xm.entity.Role;
 import hb.xm.entity.User;
-import hb.xm.service.DeptService;
 import hb.xm.service.LogService;
+import hb.xm.service.RoleService;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,32 +18,31 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
-public class DeptController {
-
+public class RoleController {
     @Autowired
-    private DeptService deptService;
+    private RoleService roleService;
     @Autowired
     private LogService logService;
 
-    //ajax请求查询部门
+    //ajax请求查询角色
     @ResponseBody
-    @RequestMapping("seldept")
+    @RequestMapping("selrole")
     public String findAll(){
-        List<Dept> depts=deptService.getDept();
-        JSONArray data=JSONArray.fromObject(depts);
+        List<Role> roles=roleService.getRole();
+        JSONArray data=JSONArray.fromObject(roles);
         return data.toString();
     }
 
-    //ajax请求添加部门
+    //ajax请求添加角色
     @ResponseBody
-    @RequestMapping("adddept")
-    public void addDept(@RequestParam("dep_id") Integer dep_id, @RequestParam("dep_name") String dep_name, @RequestParam("dep_desc") String dep_desc, @RequestParam("dep_state") String dep_state, HttpSession session, HttpServletRequest request){
+    @RequestMapping("addrole")
+    public void addRole(@RequestParam("role_id") Integer role_id, @RequestParam("role_name") String role_name, @RequestParam("role_state") String role_state, HttpSession session, HttpServletRequest request){
         Date date =new Date();
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String userDate=sdf.format(date);
+        String roleDate=sdf.format(date);
         User user= (User) session.getAttribute("loginuser");
         String userName=user.getUsername();
-        Dept dept =new Dept(dep_id,dep_name,dep_desc,dep_state,userName,userDate);
+        Role role =new Role(role_id,role_name,role_state,roleDate,userName);
         Integer userId=user.getUserid();
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
@@ -60,17 +59,18 @@ public class DeptController {
         } else {
             ip=ip;
         }
-        deptService.addDept(dept);
-        logService.addLog2("1","添加部门",userId,userDate,ip,"1");
+        roleService.addRole(role);
+        logService.addLog2("1","添加角色",userId,roleDate,ip,"1");
+
     }
 
-    //ajax请求删除部门
+    //ajax请求删除角色
     @ResponseBody
-    @RequestMapping("deldept")
-    public void deleteDept(@RequestParam("data") Integer [] data){
+    @RequestMapping("delrole")
+    public void deleteRole(@RequestParam("data") Integer [] data){
         System.out.println(data.toString());
         for (int i = 0; i <data.length ; i++) {
-            deptService.delectDept(data[i]);
+            roleService.deleteRole(data[i]);
         }
     }
 }

@@ -11,7 +11,7 @@ import javax.persistence.Table;
 public class Dept {
     @Id
     @Column(name = "DEP_ID")
-    private String dep_id;//部门id
+    private Integer dep_id;//部门id
     @Column(name = "DEP_NAME")
     private String dep_name;//部门名称
     @Column(name = "DEP_PID")
@@ -33,7 +33,7 @@ public class Dept {
 
     }
 
-    public Dept(String dep_id, String dep_name, String dep_desc, String dep_state, String create_user, String create_time) {
+    public Dept(Integer dep_id, String dep_name, String dep_desc, String dep_state, String create_user, String create_time) {
         this.dep_id = dep_id;
         this.dep_name = dep_name;
         this.dep_desc = dep_desc;
@@ -42,11 +42,11 @@ public class Dept {
         this.create_time = create_time;
     }
 
-    public String getDep_id() {
+    public Integer getDep_id() {
         return dep_id;
     }
 
-    public void setDep_id(String dep_id) {
+    public void setDep_id(Integer dep_id) {
         this.dep_id = dep_id;
     }
 
