@@ -102,7 +102,29 @@ Ext.define("mf.bm",{
                 icon:"img/50.png"
             },{
                 text:"删除",
-                icon:"img/15.png"
+                icon:"img/15.png",
+                handler:function(){
+                    var selectdata=Ext.getCmp("bm").getSelectionModel().getSelection();
+                    var data=new Array();
+                    for (var i = 0; i <selectdata.length ; i++) {
+                        data.push(selectdata[i].data.dep_id);
+                    }
+
+                    Ext.Ajax.request({
+                        url:"deldept",
+                        type:"post",
+                        success:function(){
+                            store.load();//添加之后重载数据 局部刷新
+                            alert("删除成功");
+                        },
+                        failure:function(){
+                            alert("删除失败");
+                        },
+                        params:{
+                            data:data
+                        }
+                    })
+                }
             },{
                 text:"导出Excel",
                 icon:"img/51.png"

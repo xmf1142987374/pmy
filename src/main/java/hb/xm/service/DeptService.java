@@ -8,4 +8,6 @@ public interface DeptService {
     public List<Dept> getDept();
 
     public void addDept(Dept dept);
+
+    public void delectDept(Integer dep_id);
 }

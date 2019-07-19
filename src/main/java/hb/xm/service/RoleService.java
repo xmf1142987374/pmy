@@ -8,4 +8,6 @@ public interface RoleService {
     public List<Role> getRole();
 
     public void addRole(Role role);
+
+    public void deleteRole(Integer role_id);
 }

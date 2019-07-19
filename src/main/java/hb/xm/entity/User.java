@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class User {
     @Id
     @Column(name = "USER_ID")
-    private String userid;//用户id
+    private Integer userid;//用户id
     @Column(name = "USER_NAME")
     private String uname;//用户姓名
     @Column(name = "USER_LOGIN_NAME")
@@ -38,7 +38,7 @@ public class User {
     public User() {
     }
 
-    public User(String userid, String uname, String username, String password, String user_dept, String user_sex, String user_tel, String user_phone, String user_state,  String create_time) {
+    public User(Integer userid, String uname, String username, String password, String user_dept, String user_sex, String user_tel, String user_phone, String user_state,  String create_time) {
         this.userid = userid;
         this.uname = uname;
         this.username = username;
@@ -51,11 +51,11 @@ public class User {
         this.create_time = create_time;
     }
 
-    public String getUserid() {
+    public Integer getUserid() {
         return userid;
     }
 
-    public void setUserid(String userid) {
+    public void setUserid(Integer userid) {
         this.userid = userid;
     }
 
