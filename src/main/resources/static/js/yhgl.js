@@ -3,9 +3,9 @@
 
 
 Ext.define("mf.three",{
-    extend:Ext.grid.Panel,
-    id:"mf",
-    frame:true,
+        extend:Ext.grid.Panel,
+        id:"mf",
+        frame:true,
     // width:1350,
     // height:650,
     initComponent:function(){
