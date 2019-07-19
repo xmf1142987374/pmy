@@ -1,9 +1,9 @@
 package hb.xm.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 //站点
 @Entity
 @Table(name = "iotp_site")
@@ -22,6 +22,7 @@ public class Site {
     @Column(name = "SITE_PIC")
     private String site_pic;//站点图片
 
+
     public Site() {
     }
 
@@ -33,6 +34,7 @@ public class Site {
         this.site_desc = site_desc;
         this.site_pic = site_pic;
     }
+
 
     public String getSite_id() {
         return site_id;

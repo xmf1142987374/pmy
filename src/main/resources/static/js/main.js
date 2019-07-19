@@ -7,7 +7,7 @@ Ext.onReady(function () {
         layout:"border",
         items:[{
             region:"north",
-            html:"<b style='font-size: 40px'>环境设施管理系统</b><span id='admin' style='float: right;font-size: 15px;'>欢迎您 admin</span>",
+            html:"<b style='font-size: 40px'>环境设施管理系统</b><span id='admin' style='float: right;font-size: 15px;'>欢迎您admin</span>",
             height:80
         },{
                 region:"west",
