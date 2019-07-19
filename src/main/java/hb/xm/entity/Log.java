@@ -11,7 +11,7 @@ import javax.persistence.Table;
 public class Log {
     @Id
     @Column(name="LOG_ID")
-    private String log_id;//日志id
+    private Integer log_id;//日志id
     @Column(name="LOG_TYPE")
     private String log_type;//日志类型
     @Column(name="LOG_DESC")
@@ -28,7 +28,7 @@ public class Log {
     public Log() {
     }
 
-    public Log(String log_id, String log_type, String log_desc, String user_id, String log_time, String user_ip, String is_success) {
+    public Log(Integer log_id, String log_type, String log_desc, String user_id, String log_time, String user_ip, String is_success) {
         this.log_id = log_id;
         this.log_type = log_type;
         this.log_desc = log_desc;
@@ -38,11 +38,20 @@ public class Log {
         this.is_success = is_success;
     }
 
-    public String getLog_id() {
+    public Log(String log_type, String log_desc, String user_id, String log_time, String user_ip, String is_success) {
+        this.log_type = log_type;
+        this.log_desc = log_desc;
+        this.user_id = user_id;
+        this.log_time = log_time;
+        this.user_ip = user_ip;
+        this.is_success = is_success;
+    }
+
+    public Integer getLog_id() {
         return log_id;
     }
 
-    public void setLog_id(String log_id) {
+    public void setLog_id(Integer log_id) {
         this.log_id = log_id;
     }
 

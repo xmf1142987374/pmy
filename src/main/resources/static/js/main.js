@@ -372,7 +372,8 @@ Ext.onReady(function () {
                                                 title:id.text,
                                                 closable:true,
                                                 id:id.id,
-                                                html:id.text+"页面"
+                                                layout:"fit",
+                                                items:[new mf.js()]
                                             });
                                             break;
                                         case "26":
@@ -380,7 +381,8 @@ Ext.onReady(function () {
                                                 title:id.text,
                                                 closable:true,
                                                 id:id.id,
-                                                html:id.text+"页面"
+                                                layout:"fit",
+                                                items:[new mf.rz()]
                                             });
                                             break;
                                     }
