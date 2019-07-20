@@ -48,6 +48,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+<!--poi-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.17</version>
+        </dependency>
 
 <!--json-->
         <dependency>
@@ -69,6 +75,7 @@
             <version>2.5</version>
         </dependency>
 
+        <!-- poi -->
 
 
     </dependencies>

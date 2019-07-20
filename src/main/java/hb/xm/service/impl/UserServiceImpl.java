@@ -23,6 +23,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getUserfy(Integer start, Integer limit) {
+        return userDao.getUserfy(start,limit);
+    }
+
+    @Override
     public void addUser(User user) {
         userDao.save(user);
     }
@@ -30,5 +35,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Integer userid) {
         userDao.deleteById(userid);
+    }
+
+    @Override
+    public void updateUser(User user) {
+        userDao.saveAndFlush(user);
     }
 }

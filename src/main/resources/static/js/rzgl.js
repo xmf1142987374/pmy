@@ -12,8 +12,10 @@ Ext.define("mf.rz",{
 
 
 
-        var store=new Ext.data.Store({
-            fields:["log_type","log_desc","user_id","log_time","user_ip","is_success"],
+        var pages=4; //每页显示的条数
+        var store=Ext.create('Ext.data.Store',{
+            id:"rzfy",
+            fields:["log_type","user_name","log_desc","user_id","log_time","user_ip","is_success"],
             proxy:{
                 type:"ajax",
                 url:"sellog",
@@ -23,7 +25,15 @@ Ext.define("mf.rz",{
                     root:"data"
                 }
             },
-            autoLoad:true
+            pageSize:pages,
+            autoLoad:false
+        });
+
+        store.load({
+            params:{
+                start:0,
+                limit:pages
+            }
         });
 
 
@@ -38,6 +48,12 @@ Ext.define("mf.rz",{
             columns:[{
                 text:"操作者id",
                 dataIndex:"user_id",
+                align:"center",
+                flex:1,
+                sortable:true
+            },{
+                text:"操作者",
+                dataIndex:"user_name",
                 align:"center",
                 flex:1,
                 sortable:true
@@ -73,9 +89,9 @@ Ext.define("mf.rz",{
                 sortable:true
             }],
             bbar:new Ext.PagingToolbar({
-                pageSize:20,
+                store:store,
                 displayInfo:true,
-                displayMsg:"当前显示第{0}到{1}条记录,共有2条记录",
+                displayMsg:"当前显示第{0}到{1}条记录,共有{1}条记录",
                 emptyMsg:"无记录"
             }),
             store:store

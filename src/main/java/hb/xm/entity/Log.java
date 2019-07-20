@@ -14,6 +14,8 @@ public class Log implements Serializable {
     @Id
     @Column(name="LOG_ID")
     private Integer log_id;//日志id
+    @Column(name="USER_NAME")
+    private String user_name;
     @Column(name="LOG_TYPE")
     private String log_type;//日志类型
     @Column(name="LOG_DESC")
@@ -30,8 +32,9 @@ public class Log implements Serializable {
     public Log() {
     }
 
-    public Log(Integer log_id, String log_type, String log_desc, String user_id, String log_time, String user_ip, String is_success) {
+    public Log(Integer log_id,String user_name, String log_type, String log_desc, String user_id, String log_time, String user_ip, String is_success) {
         this.log_id = log_id;
+        this.user_name = user_name;
         this.log_type = log_type;
         this.log_desc = log_desc;
         this.user_id = user_id;
@@ -55,6 +58,14 @@ public class Log implements Serializable {
 
     public void setLog_id(Integer log_id) {
         this.log_id = log_id;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
     public String getLog_type() {

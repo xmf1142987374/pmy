@@ -11,8 +11,9 @@ Ext.define("mf.js",{
     initComponent:function(){
 
 
-
-        var store=new Ext.data.Store({
+        var pages=4; //每页显示的条数
+        var store=Ext.create('Ext.data.Store',{
+            id:"jsfy",
             fields:["role_id","role_name","role_state"],
             proxy:{
                 type:"ajax",
@@ -23,10 +24,16 @@ Ext.define("mf.js",{
                     root:"data"
                 }
             },
-            autoLoad:true
+            pageSize:pages,
+            autoLoad:false
         });
 
-
+        store.load({
+            params:{
+                start:0,
+                limit:pages
+            }
+        });
 
         //界面
         Ext.apply(this,{
@@ -99,7 +106,19 @@ Ext.define("mf.js",{
                 icon:"img/15.png"
             },{
                 text:"导出Excel",
-                icon:"img/51.png"
+                icon:"img/51.png",
+                handler:function(){
+                    Ext.Ajax.request({
+                        url:"addExcelRole",
+                        success:function(){
+                            store.load();
+                            alert("成功");
+                        },
+                        failure:function(){
+                            alert("失败");
+                        }
+                    })
+                }
             },{
                 text:"刷新",
                 handler:function(){
@@ -137,9 +156,9 @@ Ext.define("mf.js",{
                 }]
             }],
             bbar:new Ext.PagingToolbar({
-                pageSize:20,
+                store:store,
                 displayInfo:true,
-                displayMsg:"当前显示第{0}到{1}条记录,共有2条记录",
+                displayMsg:"当前显示第{0}到{1}条记录,共有{1}条记录",
                 emptyMsg:"无记录"
             }),
             store:store

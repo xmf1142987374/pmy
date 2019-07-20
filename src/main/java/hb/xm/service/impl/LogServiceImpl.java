@@ -20,12 +20,17 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
+    public List<Log> getLogfy(Integer start, Integer limit) {
+        return logDao.getLogfy(start,limit);
+    }
+
+    @Override
     public void addLog(Log log) {
         logDao.save(log);
     }
 
     @Override
-    public void addLog2(String log_type,String log_desc,Integer user_id,String log_time,String user_ip,String is_success) {
-        logDao.addLog(log_type,log_desc,user_id,log_time,user_ip,is_success);
+    public void addLog2(String user_name, String log_type,String log_desc,Integer user_id,String log_time,String user_ip,String is_success) {
+        logDao.addLog(user_name,log_type,log_desc,user_id,log_time,user_ip,is_success);
     }
 }

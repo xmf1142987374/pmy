@@ -8,7 +8,11 @@ public interface UserService {
     public User getUser(User user);
     public List<User> getUsers();
 
+    public List<User> getUserfy(Integer start, Integer limit);
+
     public void addUser(User user);
 
     public void deleteUser(Integer userid);
+
+    public void updateUser(User user);
 }

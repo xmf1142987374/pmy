@@ -11,8 +11,9 @@ Ext.define("mf.bm",{
     initComponent:function(){
 
 
-
-        var store=new Ext.data.Store({
+        var pages=4; //每页显示的条数
+        var store=Ext.create('Ext.data.Store',{
+            id:"bmfy",
             fields:["dep_id","dep_name","dep_desc","dep_state","create_user","create_time","modify_user","modify_time"],
             proxy:{
                 type:"ajax",
@@ -23,9 +24,16 @@ Ext.define("mf.bm",{
                     root:"data"
                 }
             },
-            autoLoad:true
+            pageSize:pages,
+            autoLoad:false
         });
 
+        store.load({
+            params:{
+                start:0,
+                limit:pages
+            }
+        });
 
 
         //界面
@@ -127,7 +135,19 @@ Ext.define("mf.bm",{
                 }
             },{
                 text:"导出Excel",
-                icon:"img/51.png"
+                icon:"img/51.png",
+                handler:function(){
+                    Ext.Ajax.request({
+                        url:"addExcelDept",
+                        success:function(){
+                            store.load();
+                            alert("成功");
+                        },
+                        failure:function(){
+                            alert("失败");
+                        }
+                    })
+                }
             },{
                 text:"刷新",
                 handler:function(){
@@ -186,9 +206,9 @@ Ext.define("mf.bm",{
                 sortable:true
             }],
             bbar:new Ext.PagingToolbar({
-                pageSize:20,
+                store:store,
                 displayInfo:true,
-                displayMsg:"当前显示第{0}到{1}条记录,共有2条记录",
+                displayMsg:"当前显示第{0}到{1}条记录,共有{1}条记录",
                 emptyMsg:"无记录"
             }),
             store:store
