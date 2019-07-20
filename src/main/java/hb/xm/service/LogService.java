@@ -8,7 +8,9 @@ public interface LogService {
 
     public List<Log> getLog();
 
+    public List<Log> getLogfy(Integer start, Integer limit);
+
     public void addLog(Log log);
 
-    public void addLog2(String log_type,String log_desc,Integer user_id,String log_time,String user_ip,String is_success);
+    public void addLog2(String user_name,String log_type,String log_desc,Integer user_id,String log_time,String user_ip,String is_success);
 }

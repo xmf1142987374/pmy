@@ -1,10 +1,14 @@
 package hb.xm.controller;
 
+import hb.xm.entity.Dept;
 import hb.xm.entity.Role;
 import hb.xm.entity.User;
 import hb.xm.service.LogService;
 import hb.xm.service.RoleService;
 import net.sf.json.JSONArray;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -27,10 +33,12 @@ public class RoleController {
     //ajax请求查询角色
     @ResponseBody
     @RequestMapping("selrole")
-    public String findAll(){
-        List<Role> roles=roleService.getRole();
-        JSONArray data=JSONArray.fromObject(roles);
-        return data.toString();
+    public String findAll(@RequestParam("start")Integer start,@RequestParam("limit") Integer limit){
+        List<Role> roles=roleService.getRolefy(start,limit);
+        JSONArray datas=JSONArray.fromObject(roles);
+        String totalCount="{totalCount:"+roleService.getRole().size()+"}";
+        String data="{totalCount:"+roleService.getRole().size()+",data:"+datas.toString()+"}";
+        return data;
     }
 
     //ajax请求添加角色
@@ -44,6 +52,7 @@ public class RoleController {
         String userName=user.getUsername();
         Role role =new Role(role_id,role_name,role_state,roleDate,userName);
         Integer userId=user.getUserid();
+        String uName=user.getUname();
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
@@ -60,7 +69,7 @@ public class RoleController {
             ip=ip;
         }
         roleService.addRole(role);
-        logService.addLog2("1","添加角色",userId,roleDate,ip,"1");
+        logService.addLog2(uName,"1","添加角色",userId,roleDate,ip,"1");
 
     }
 
@@ -71,6 +80,38 @@ public class RoleController {
         System.out.println(data.toString());
         for (int i = 0; i <data.length ; i++) {
             roleService.deleteRole(data[i]);
+        }
+    }
+
+    //输出excel
+    @ResponseBody
+    @RequestMapping("addExcelRole")
+    public void poiDept(){
+        HSSFWorkbook book = new HSSFWorkbook();
+        HSSFSheet sheet = book.createSheet("角色表.xlsx");
+        HSSFRow row = sheet.createRow(0);
+        row.createCell(0).setCellValue("角色id");
+        row.createCell(1).setCellValue("角色名称");
+        row.createCell(2).setCellValue("角色描述");
+        List<Role> list=roleService.getRole();
+        for (int i = 0; i < list.size(); i++) {
+            HSSFRow temp_row=sheet.createRow(i + 1);
+            temp_row.createCell(0).setCellValue(list.get(i).getRole_id());
+            temp_row.createCell(1).setCellValue(list.get(i).getRole_name());
+            temp_row.createCell(2).setCellValue(list.get(i).getRole_state());
+            try {
+                book.write(new FileOutputStream("src\\main\\resources\\static\\excel\\角色表.xlsx"));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally {
+                try {
+                    book.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

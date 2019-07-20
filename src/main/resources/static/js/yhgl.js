@@ -1,135 +1,143 @@
-
 //用户管理界面
 
 
-Ext.define("mf.three",{
-        extend:Ext.grid.Panel,
-        id:"mf",
-        frame:true,
+Ext.define("mf.three", {
+    extend: Ext.grid.Panel,
+    id: "mf",
+    frame: true,
     // width:1350,
     // height:650,
-    initComponent:function(){
+    initComponent: function () {
 
 
-
-        var store=new Ext.data.Store({
-            fields:["userid","uname","user_dept","username","user_sex","user_tel","user_phone","user_state"],
-            proxy:{
-                type:"ajax",
-                url:"seluser",
-                reader:{
-                    type:"json",
-                    totalProperty:"totalCount",
-                    root:"data"
+        var pages = 4; //每页显示的条数
+        var store = Ext.create('Ext.data.Store', {
+            id: "yhfy",
+            fields: ["userid", "uname", "user_dept", "username", "user_sex", "user_tel", "user_phone", "user_state"],
+            proxy: {
+                type: "ajax",
+                url: "seluser",
+                reader: {
+                    type: "json",
+                    totalProperty: "totalCount",
+                    root: "data"
                 }
             },
-            autoLoad:true
+            pageSize: pages,
+            autoLoad: false
         });
 
-        Ext.regModel("xbmodel",{
-            fields:[{
-                name:"xb"
-            },{
-                name:"xbvalue"
+        store.load({
+            params: {
+                start: 0,
+                limit: pages
+            }
+        });
+
+        Ext.regModel("xbmodel", {
+            fields: [{
+                name: "xb"
+            }, {
+                name: "xbvalue"
             }]
         });
 
-        var xb=Ext.create(Ext.data.Store,{
-            model:"xbmodel",
-            data:[{
-                xb:"男",
+        var xb = Ext.create(Ext.data.Store, {
+            model: "xbmodel",
+            data: [{
+                xb: "男",
                 //xbvalue:"1"
-            },{
-                xb:"女",
+            }, {
+                xb: "女",
                 //xbvalue:"2"
             }]
         });
         //界面
-        Ext.apply(this,{
-            tbar:[{
-                text:"添加",
-                icon:"img/16.png",
-                handler:function(){
-                    var win=new Ext.Window({
-                        title:'添加用户',
-                        width:300,
-                        height:300,
-                        frame:true
+        Ext.apply(this, {
+            tbar: [{
+                text: "添加",
+                icon: "img/16.png",
+                handler: function () {
+                    var win = new Ext.Window({
+                        title: '添加用户',
+                        width: 300,
+                        height: 300,
+                        frame: true
                     });
-                    var form= new Ext.panel.Panel({
-                        border:false,
-                        frame:true,
-                        layout:"form",
-                        items:[{
-                            xtype:"textfield",
-                            id:"gh",
-                            fieldLabel:"工号"
-                        },{
-                            xtype:"textfield",
-                            id:"name",
-                            fieldLabel:"姓名"
-                        },{
-                            xtype:"textfield",
-                            id:"password",
-                            fieldLabel:"密码"
-                        },{
-                            xtype:"textfield",
-                            id:"loginName",
-                            fieldLabel:"登录账号"
-                        },{
-                            xtype:"textfield",
-                            id:"bm",
-                            fieldLabel:"部门"
-                        },{
-                            xtype:"textfield",
-                            id:"sex",
-                            fieldLabel:"性别"
-                        },{
-                            xtype:"textfield",
-                            id:"tel",
-                            fieldLabel:"电话"
-                        },{
-                            xtype:"textfield",
-                            id:"phone",
-                            fieldLabel:"手机号"
+                    var form = new Ext.panel.Panel({
+                        border: false,
+                        frame: true,
+                        layout: "form",
+                        items: [{
+                            xtype: "textfield",
+                            id: "gh",
+                            fieldLabel: "工号"
+                        }, {
+                            xtype: "textfield",
+                            id: "name",
+                            fieldLabel: "姓名"
+                        }, {
+                            xtype: "textfield",
+                            id: "password",
+                            fieldLabel: "密码"
+                        }, {
+                            xtype: "textfield",
+                            id: "loginName",
+                            fieldLabel: "登录账号"
+                        }, {
+                            xtype: "textfield",
+                            id: "bm",
+                            fieldLabel: "部门"
+                        }, {
+                            xtype: "textfield",
+                            id: "sex",
+                            fieldLabel: "性别"
+                        }, {
+                            xtype: "textfield",
+                            id: "tel",
+                            fieldLabel: "电话"
+                        }, {
+                            xtype: "textfield",
+                            id: "phone",
+                            fieldLabel: "手机号"
                         }],
-                        buttons:[{
-                            text:'添加',
-                            handler:function () {
-                                var user_id=Ext.getCmp("gh").value;
-                                var user_name=Ext.getCmp("name").value;
-                                var user_password=Ext.getCmp("password").value;
-                                var user_login_name=Ext.getCmp("loginName").value;
-                                var user_department=Ext.getCmp("bm").value;
-                                var user_gender=Ext.getCmp("sex").value;
-                                var user_tel=Ext.getCmp("tel").value;
-                                var user_phone=Ext.getCmp("phone").value;
+                        buttons: [{
+                            text: '添加',
+                            handler: function () {
+                                var user_id = Ext.getCmp("gh").value;
+                                var user_name = Ext.getCmp("name").value;
+                                var user_password = Ext.getCmp("password").value;
+                                var user_login_name = Ext.getCmp("loginName").value;
+                                var user_department = Ext.getCmp("bm").value;
+                                var user_gender = Ext.getCmp("sex").value;
+                                var user_tel = Ext.getCmp("tel").value;
+                                var user_phone = Ext.getCmp("phone").value;
                                 Ext.Ajax.request({
-                                    url:"adduser",
-                                    type:"post",
-                                    success:function(){
+                                    url: "adduser",
+                                    type: "post",
+                                    success: function () {
                                         alert("成功");
                                         store.load();
                                         win.close();
                                     },
-                                    failure:function(){
+                                    failure: function () {
                                         alert("失败");
                                     },
-                                    params:{
-                                        user_id : user_id,
-                                        user_name : user_name,
-                                        user_password : user_password,
-                                        user_login_name : user_login_name,
-                                        user_department : user_department,
-                                        user_gender : user_gender,
-                                        user_tel : user_tel,
-                                        user_phone : user_phone
+                                    params: {
+                                        user_id: user_id,
+                                        user_name: user_name,
+                                        user_password: user_password,
+                                        user_login_name: user_login_name,
+                                        user_department: user_department,
+                                        user_gender: user_gender,
+                                        user_tel: user_tel,
+                                        user_phone: user_phone
                                     }
                                 })
                             }
-                        },{
-                            text:"取消",
-                            handler:function(){
+                        }, {
+                            text: "取消",
+                            handler: function () {
                                 win.close();
                             }
                         }]
@@ -137,142 +145,212 @@ Ext.define("mf.three",{
                     win.add(form);
                     win.show();
                 }
-            },{
-                text:"修改",
-                icon:"img/50.png"
-            },{
-                text:"导出Excel",
-                icon:"img/51.png"
-            },{
-                text:"删除",
-                icon:"img/15.png",
+            }, {
+                text: "修改",
+                icon: "img/50.png"
+            }, {
+                text: "导出Excel",
+                icon: "img/51.png",
                 handler:function(){
-                    var selectdata=Ext.getCmp("mf").getSelectionModel().getSelection();
-                    var data=new Array();
-                    for (var i = 0; i <selectdata.length ; i++) {
+                    Ext.Ajax.request({
+                        url:"addExcelUser",
+                        success:function(){
+                            store.load();
+                            alert("成功");
+                        },
+                        failure:function(){
+                            alert("失败");
+                        }
+                    })
+                }
+            }, {
+                text: "删除",
+                icon: "img/15.png",
+                handler: function () {
+                    var selectdata = Ext.getCmp("mf").getSelectionModel().getSelection();
+                    var data = new Array();
+                    for (var i = 0; i < selectdata.length; i++) {
                         data.push(selectdata[i].data.userid);
                     }
 
                     Ext.Ajax.request({
-                        url:"delUser",
-                        type:"post",
-                        success:function(){
+                        url: "delUser",
+                        type: "post",
+                        success: function () {
                             store.load();//添加之后重载数据 局部刷新
                             alert("删除成功");
                         },
-                        failure:function(){
+                        failure: function () {
                             alert("删除失败");
                         },
-                        params:{
-                            data:data
+                        params: {
+                            data: data
                         }
                     })
                 }
-            },{
-                text:"修改密码",
-                icon:"img/56.png"
-            },{
-                text:"刷新",
-                icon:"img/57.png"
-            },"-","->",{
-                xtype:"textfield",
+            }, /*{
+                text: "修改密码",
+                icon: "img/56.png",
+                handler: function () {
+                    var win = new Ext.Window({
+                        title: '修改密码',
+                        width: 300,
+                        height: 200,
+                        frame: true
+                    });
+                    var form = new Ext.panel.Panel({
+                        border: false,
+                        frame: true,
+                        layout: "form",
+                        items: [{
+                            xtype: "textfield",
+                            inputType: 'password',
+                            id: "password1",
+                            fieldLabel: "新密码"
+                        }, {
+                            xtype: "textfield",
+                            inputType: 'password',
+                            id: "password2",
+                            fieldLabel: "重新输入新密码"
+                        }],
+                        buttons: [{
+                            text: '确定',
+                            handler: function () {
+                                var password1 = Ext.getCmp("password1").value;
+                                var password2 = Ext.getCmp("password2").value;
+                                if (password1 == password2) {
+                                    Ext.Ajax.request({
+                                        url: "updateUserPas",
+                                        type: "post",
+                                        success: function () {
+                                            alert("修改成功,请重新登录");
+                                            store.load();
+                                            win.close();
+                                        },
+                                        failure: function () {
+                                            alert("失败");
+                                        },
+                                        params: {
+                                            password1: password1,
+                                            password2: password2
+                                        }
+                                    })
+                                } else {
+                                    alert("密码不一致");
+                                }
+                            }
+                        }, {
+                            text: "取消",
+                            handler: function () {
+                                win.close();
+                            }
+                        }]
+                    });
+                    win.add(form);
+                    win.show();
+                }
+            },*/ {
+                text: "刷新",
+                icon: "img/57.png"
+            }, "-", "->", {
+                xtype: "textfield",
                 labelAlign: "right",
-                width:200,
-                fieldLabel:"姓名"
-            },{
-                xtype:"textfield",
+                width: 200,
+                fieldLabel: "姓名"
+            }, {
+                xtype: "textfield",
                 labelAlign: "right",
-                width:200,
-                fieldLabel:"登录账户"
-            },{
-                xtype:"combo",
+                width: 200,
+                fieldLabel: "登录账户"
+            }, {
+                xtype: "combo",
                 labelAlign: "right",
-                width:150,
-                fieldLabel:"性别",
-                store:xb,
-                queryMode:"local",
-                triggerAction:"all",
-                displayField:"xb",
-                valueField:"xbvalue"
-            },{
-                text:"查询",
-                icon:"img/4.png",
-                handler:function () {
+                width: 150,
+                fieldLabel: "性别",
+                store: xb,
+                queryMode: "local",
+                triggerAction: "all",
+                displayField: "xb",
+                valueField: "xbvalue"
+            }, {
+                text: "查询",
+                icon: "img/4.png",
+                handler: function () {
                     alert(11);
                 }
             }],
-            selType:"checkboxmodel",
-            columns:[{
-                text:"工号",
-                dataIndex:"userid",
-                align:"center",
-                flex:1,
-                sortable:true
-            },{
-                text:"姓名",
-                dataIndex:"uname",
-                align:"center",
-                flex:3,
-                sortable:true
-            },{
-                text:"部门",
-                align:"center",
-                dataIndex:"user_dept",
-                flex:3,
-                sortable:true
-            },{
-                text:"登录账户",
-                align:"center",
-                dataIndex:"username",
-                flex:3,
-                sortable:true
-            },{
-                text:"性别",
-                align:"center",
-                dataIndex:"user_sex",
-                flex:1,
-                sortable:true
-            },{
-                text:"电话",
-                align:"center",
-                dataIndex:"user_tel",
-                flex:3,
-                sortable:true
-            },{
-                text:"手机号",
-                align:"center",
-                dataIndex:"user_phone",
-                flex:3,
-                sortable:true
-            },{
-                text:"状态",
-                align:"center",
-                dataIndex:"user_state",
-                flex:1,
-                sortable:true
-            },{
-                text:"操作",
-                align:"center",
-                flex:5,
-                xtype:"actioncolumn",
-                items:[{
-                    icon:"img/55.png",
-                    text:"查看明细"
-                },{
-                    icon:"img/52.png",
-                    dataIndex:"角色"
-                },{
-                    icon:"img/54.png",
-                    dataIndex:"数据权限"
+            selType: "checkboxmodel",
+            columns: [{
+                text: "工号",
+                dataIndex: "userid",
+                align: "center",
+                flex: 1,
+                sortable: true
+            }, {
+                text: "姓名",
+                dataIndex: "uname",
+                align: "center",
+                flex: 3,
+                sortable: true
+            }, {
+                text: "部门",
+                align: "center",
+                dataIndex: "user_dept",
+                flex: 3,
+                sortable: true
+            }, {
+                text: "登录账户",
+                align: "center",
+                dataIndex: "username",
+                flex: 3,
+                sortable: true
+            }, {
+                text: "性别",
+                align: "center",
+                dataIndex: "user_sex",
+                flex: 1,
+                sortable: true
+            }, {
+                text: "电话",
+                align: "center",
+                dataIndex: "user_tel",
+                flex: 3,
+                sortable: true
+            }, {
+                text: "手机号",
+                align: "center",
+                dataIndex: "user_phone",
+                flex: 3,
+                sortable: true
+            }, {
+                text: "状态",
+                align: "center",
+                dataIndex: "user_state",
+                flex: 1,
+                sortable: true
+            }, {
+                text: "操作",
+                align: "center",
+                flex: 5,
+                xtype: "actioncolumn",
+                items: [{
+                    icon: "img/55.png",
+                    text: "查看明细"
+                }, {
+                    icon: "img/52.png",
+                    dataIndex: "角色"
+                }, {
+                    icon: "img/54.png",
+                    dataIndex: "数据权限"
                 }]
             }],
-            bbar:new Ext.PagingToolbar({
-                pageSize:20,
-                displayInfo:true,
-                displayMsg:"当前显示第{0}到{1}条记录,共有2条记录",
-                emptyMsg:"无记录"
+            bbar: new Ext.PagingToolbar({
+                store: store,
+                displayInfo: true,
+                displayMsg: "当前显示第{0}到{1}条记录,共有{1}条记录",
+                emptyMsg: "无记录"
             }),
-            store:store
+            store: store
         });
 
         this.callParent(arguments);

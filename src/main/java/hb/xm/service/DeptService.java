@@ -7,6 +7,8 @@ import java.util.List;
 public interface DeptService {
     public List<Dept> getDept();
 
+    public List<Dept> getDeptfy(Integer start, Integer limit);
+
     public void addDept(Dept dept);
 
     public void delectDept(Integer dep_id);

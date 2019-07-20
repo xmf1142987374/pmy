@@ -19,6 +19,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public List<Role> getRolefy(Integer start, Integer limit) {
+        return roleDao.getRolefy(start,limit);
+    }
+
+    @Override
     public void addRole(Role role) {
         roleDao.save(role);
     }

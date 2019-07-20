@@ -20,6 +20,11 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
+    public List<Dept> getDeptfy(Integer start, Integer limit) {
+        return deptDao.getDeptfy(start,limit);
+    }
+
+    @Override
     public void addDept(Dept dept) {
         deptDao.save(dept);
     }
