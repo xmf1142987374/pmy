@@ -4,11 +4,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 //部门表
 @Entity
 @Table(name = "iotp_department")
-public class Dept {
+public class Dept implements Serializable {
+    static final long serialVersionUID = 1L;
     @Id
     @Column(name = "DEP_ID")
     private Integer dep_id;//部门id

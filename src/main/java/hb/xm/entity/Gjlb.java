@@ -6,11 +6,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 //告警列表
 @Entity
 @Table(name = "iotp_warning")
-public class Gjlb {
+public class Gjlb implements Serializable {
+    static final long serialVersionUID = 1L;
     @Id
     @Column(name = "warning_type")//告警分类
     private String warning_type;

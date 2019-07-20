@@ -44,19 +44,19 @@ Ext.define("xw.gdgl",{
 //             }
 //         });
 //站点下拉数据
-        var zd = Ext.create('Ext.data.Store', {
-            fields: ['site_name', 'zqvalue'],
-            proxy:{
-                type:"ajax",
-                url:"selsitenames",
-                reader:{
-                    type:"json",
-                    totalProperty:"totalCount",
-                    root:"data"
-                }
-            },
-            autoLoad:true
-        });
+//         var zd = Ext.create('Ext.data.Store', {
+//             fields: ['site_name', 'zqvalue'],
+//             proxy:{
+//                 type:"ajax",
+//                 url:"selsitenames",
+//                 reader:{
+//                     type:"json",
+//                     totalProperty:"totalCount",
+//                     root:"data"
+//                 }
+//             },
+//             autoLoad:true
+//         });
 
         //界面
         Ext.apply(this,{

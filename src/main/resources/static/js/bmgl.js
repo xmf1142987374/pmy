@@ -130,6 +130,9 @@ Ext.define("mf.bm",{
                 icon:"img/51.png"
             },{
                 text:"刷新",
+                handler:function(){
+                    store.reload();
+                },
                 icon:"img/57.png"
             }],
             selType:"checkboxmodel",

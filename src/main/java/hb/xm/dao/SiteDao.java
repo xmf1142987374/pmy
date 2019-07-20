@@ -9,4 +9,5 @@ import java.util.List;
 public interface SiteDao extends JpaRepository<Site,Integer> {
     @Query(value="select * from iotp_site a join iotp_site_log b on a.SITE_ID=b.SITE_ID",nativeQuery = true)
     public List<Site> getSiteAreas();
+
 }

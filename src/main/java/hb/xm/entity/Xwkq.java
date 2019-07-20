@@ -1,11 +1,12 @@
 package hb.xm.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 //站点考勤纪录
 @Entity
 @Table(name = "iotp_site_log")
-public class Xwkq {
+public class Xwkq implements Serializable {
     @Id
     @Column(name = "SITE_ID")
     private  String site_id;//站点id

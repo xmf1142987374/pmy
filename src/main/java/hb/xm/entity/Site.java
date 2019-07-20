@@ -1,13 +1,14 @@
 package hb.xm.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 //站点
 @Entity
 @Table(name = "iotp_site")
-public class Site {
+public class Site implements Serializable {
     @Id
     @Column(name = "SITE_ID")
     private String site_id;//站点id

@@ -5,11 +5,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 //用户类
 @Entity
 @Table(name = "iotp_user")
-public class User {
+public class User implements Serializable {
     @Id
     @Column(name = "USER_ID")
     private Integer userid;//用户id

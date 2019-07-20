@@ -1,59 +1,122 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset="utf-8" />
-
-<!--引用百度地图API-->
-<style type="text/css">
-    html,body{margin:0;padding:0;}
-    .iw_poi_title {color:#CC5522;font-size:14px;font-weight:bold;overflow:hidden;padding-right:13px;white-space:nowrap}
-    .iw_poi_content {font:12px arial,sans-serif;overflow:visible;padding-top:4px;white-space:-moz-pre-wrap;word-wrap:break-word}
-</style>
-<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../extjs/resources/css/ext-all.css">
+  <script type="text/javascript" src="../extjs/ext-all.js"></script>
 </head>
-
-<body>
-  <!--百度地图容器-->
-  <div style="height:650px;border:#ccc solid 1px;" id="dituContent"></div>
-</body>
 <script type="text/javascript">
-    //创建和初始化地图函数�?
-    function initMap(){
-        createMap();//创建地图
-        setMapEvent();//设置地图事件
-        addMapControl();//向地图添加控�?
-    }
-    
-    //创建地图函数�?
-    function createMap(){
-        var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地�?
-        var point = new BMap.Point(112.959902,28.231756);//定义一个中心点坐标
-        map.centerAndZoom(point,13);//设定地图的中心点和坐标并将地图显示在地图容器�?
-        window.map = map;//将map变量存储在全局
-    }
-    
-    //地图事件设置函数�?
-    function setMapEvent(){
-        map.enableDragging();//启用地图拖拽事件，默认启�?可不�?
-        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
-        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启�?可不�?
-        map.enableKeyboard();//启用键盘上下左右键移动地�?
-    }
-    
-    //地图控件添加函数�?
-    function addMapControl(){
-        //向地图中添加缩放控件
-	var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
-	map.addControl(ctrl_nav);
-        //向地图中添加缩略图控�?
-	//var ctrl_ove = new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:1});
-	//map.addControl(ctrl_ove);
-        //向地图中添加比例尺控�?
-	var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
-	map.addControl(ctrl_sca);
-    }
-    
-    
-    initMap();//创建和初始化地图
+  Ext.onReady(function () {
+
+
+//站点区域数据
+    var site_areas = Ext.create('Ext.data.Store', {
+      fields: ["site_location"],
+      proxy:{
+        type:"ajax",
+        url:"/selSiteNames",
+        reader:{
+          type:"json",
+          totalProperty:"totalCount",
+          root:"data"
+        }
+      },
+      //autoLoad:true
+    });
+    var  node="";
+    site_areas.load();
+
+
+
+
+  Ext.create(Ext.container.Viewport, {
+    layout: "border",
+    items: [{
+      region:"north",
+      height:30,
+      items:[{
+        xtype:"checkboxgroup",
+        width:400,
+        items:[{
+          icon:"img/100.png",
+          boxLabel:"A类站点"
+        },{
+          icon:"../img/101.png",
+          boxLabel:"B类站点"
+        },{
+          icon:"../img/102.png",
+          boxLabel:"C类站点"
+        },{
+          icon:"../img/103.png",
+          boxLabel:"D类站点"
+        }]
+      }]
+    },{
+      title:"站点区域",
+      region:"east",
+      width:200,
+      height:600,
+      collapsible:true,
+      layout:"accordion",
+      items:[{
+        title:"长沙县",
+        useArrows: true,
+        hideCollapseTool:true,
+        items:[new Ext.tree.Panel({
+          listeners:{
+            itemclick:function (tree,cor) {
+              var id=cor.raw;
+              var tabpanel=parent.Ext.getCmp("tabpanel");
+                if (parent.Ext.getCmp(id.id)) {
+                  tabpanel.setActiveTab(parent.Ext.getCmp(id.id));
+                }else {
+                  var t=tabpanel.add({
+                    title:id.text,
+                    closable:true,
+                    id:id.id,
+                    html:id.text+"页面",
+                    // items:[new mf.three()]
+                  });
+                  tabpanel.setActiveTab(t);
+                }
+
+            }
+          },
+          id:"cs",
+          root:{
+            text:"长沙县",
+            expand:true,
+          },
+
+        })]
+      }]
+    },{
+      region:"center",
+      xtype:"tabpanel",
+      id:"tabpanel"
+    }]
+  });
+
+
+  //填充数据库所有的地方区域
+    var arr=new Array();
+    site_areas.load({
+      callback: function(){
+        for (var i = 0; i <site_areas.getCount() ; i++) {
+              var id=i*100+100;
+              var tmp = site_areas.getAt(i).get("site_location");
+              node={leaf:true,text:tmp,id:id};
+          arr.push(node);
+          if (i==site_areas.getCount()-1){
+            Ext.getCmp("cs").getRootNode().appendChild(arr);
+          }
+
+        }
+      }
+    });
+
+  })
 </script>
+<body>
+</body>
 </html>

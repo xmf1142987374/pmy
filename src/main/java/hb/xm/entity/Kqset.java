@@ -1,11 +1,13 @@
 package hb.xm.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 //考勤规则
 @Entity
 @Table(name = "iotp_site_log_sets")
-public class Kqset {
+public class Kqset implements Serializable {
+    static final long serialVersionUID = 1L;
     @Id
     @Column(name = "sets_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -173,6 +173,9 @@ Ext.define("mf.three",{
                 icon:"img/56.png"
             },{
                 text:"刷新",
+                handler:function(){
+                    store.reload();
+                },
                 icon:"img/57.png"
             },"-","->",{
                 xtype:"textfield",
@@ -257,13 +260,13 @@ Ext.define("mf.three",{
                 xtype:"actioncolumn",
                 items:[{
                     icon:"img/55.png",
-                    text:"查看明细"
+                    showText:"查看明细"
                 },{
                     icon:"img/52.png",
-                    dataIndex:"角色"
+                    showText:"角色"
                 },{
                     icon:"img/54.png",
-                    dataIndex:"数据权限"
+                    showText:"数据权限"
                 }]
             }],
             bbar:new Ext.PagingToolbar({

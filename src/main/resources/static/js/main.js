@@ -3,6 +3,12 @@ Ext.onReady(function () {
 
 
 
+    // var iframe = Ext.create(Ext.ux.IFrame, {
+    //     frameName: 'hello',
+    //     src: "html/map.html"
+    // });
+
+
     Ext.create(Ext.container.Viewport,{
         layout:"border",
         items:[{
@@ -103,6 +109,7 @@ Ext.onReady(function () {
                                             var t=tabpanel.add({
                                                 title:id.text,
                                                 closable:true,
+                                                id:id.id,
                                                 layout:"fit",
                                                 items:[new xw.xjgz()]
                                             });
@@ -111,6 +118,7 @@ Ext.onReady(function () {
                                             var t=tabpanel.add({
                                                 title:id.text,
                                                 closable:true,
+                                                id:id.id,
                                                 layout:"fit",
                                                 items:[new xw.gdgl()]
                                             });
@@ -425,6 +433,7 @@ Ext.onReady(function () {
             items:[{
                 icon:"../img/19.png",
                 title:"主页",
+                // items:iframe
                 html:"<iframe src='html/map.html' width='100%' height='100%'></iframe>"
                 // closable:true
             }]
