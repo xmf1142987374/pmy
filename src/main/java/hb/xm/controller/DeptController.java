@@ -55,22 +55,7 @@ public class DeptController {
         Dept dept =new Dept(dep_id,dep_name,dep_desc,dep_state,userName,userDate);
         Integer userId=user.getUserid();
         String uName=user.getUname();
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip  = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip  = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip  = request.getRemoteAddr();
-        }
-        if (ip.contains(",")) {
-            ip =ip.split(",")[0];
-        } else {
-            ip =ip;
-        }
-        System.out.println(ip);
+        String ip=request.getRemoteAddr();
         deptService.addDept(dept);
         logService.addLog2(uName,"1","添加部门",userId,userDate,ip,"1");
     }

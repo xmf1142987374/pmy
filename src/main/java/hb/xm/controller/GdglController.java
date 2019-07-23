@@ -42,7 +42,7 @@ public class GdglController {
         gdglService.addGdgl(gdgl);
     }
 
-    //ajax请求删除角色
+    //ajax请求删除选择工单
     @ResponseBody
     @RequestMapping("delegdgl")
     public void deleteGdgl(@RequestParam("data") Integer[] data) {

@@ -5,6 +5,7 @@
     <title>Title</title>
     <link rel="stylesheet" href="../extjs/resources/css/ext-all.css">
     <script type="text/javascript" src="../extjs/ext-all.js"></script>
+    <script type="text/javascript" src="../js/sitexwkq.js"></script>
 </head>
 <script type="text/javascript">
     Ext.onReady(function(){
@@ -25,10 +26,9 @@
                 title:"巡检工单",
 
             },{
-                title:"站点QOs",
-
-            },{
                 title:"考勤纪录",
+                layout:"fit",
+                items: [new site.kqjl()]
 
             }]
         })
