@@ -22,4 +22,9 @@ public class SiteServiceImpl implements SiteService {
     public List<Site> getSiteAreas() {
         return siteDao.getSiteAreas();
     }
+
+    @Override
+    public List<Site> getSiteByName(String sitename) {
+        return siteDao.getSiteByName(sitename);
+    }
 }

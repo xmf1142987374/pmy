@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <link rel="stylesheet" href="../extjs/resources/css/ext-all.css">
+    <script type="text/javascript" src="../extjs/ext-all.js"></script>
+    <style>
+        html,
+        body,
+        #container {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=cec6f15ceee608ba724aeb91120708aa&plugin=Map3D,AMap.DistrictLayer,AMap.Scale,AMap.ToolBar"></script>
+<script src="https://a.amap.com/Loca/static/mock/adcodes.js"></script>
+<script>
+
+    Ext.onReady(function () {
+//站点区域数据
+        var site_towns = Ext.create('Ext.data.Store', {
+            fields: ["town_id","town_name","town_x_num","town_y_num","site_type"],
+            proxy:{
+                type:"ajax",
+                url:"/selTowns",
+                reader:{
+                    type:"json",
+                    totalProperty:"totalCount",
+                    root:"data"
+                }
+            },
+            //autoLoad:true
+        });
+
+        site_towns.load();
+        var satellite = new AMap.TileLayer.Satellite();
+        var roadNet = new AMap.TileLayer.RoadNet();
+        var adCode = 430100;
+        var depth = 2;
+        var map;
+        var center= [113.0808100000, 28.2461500000];
+
+         function createMap(){
+            map = new AMap.Map("container", {
+                zoom: 9.5,
+                pitch: 0,
+                viewMode: '3D',
+                features:["bg","point"],
+            });
+         }
+    // 创建省份图层
+         var disProvince;
+    function initPro(code, dep) {
+        dep=dep;
+        adCode = code;
+        depth = dep;
+        disProvince = new AMap.DistrictLayer.Province({
+            zIndex: 14,
+            adcode: [code],
+            depth: dep,
+            styles: {
+                'fill': function (properties) {
+                    var adcode = properties.adcode;
+                    return getColorByAdcode(adcode);
+                },
+
+                'province-stroke': 'cornflowerblue',
+                'city-stroke': 'white', // 中国地级市边界
+                'county-stroke': 'rgba(255,255,255,0.5)' // 中国区县边界
+            }
+        });
+
+        disProvince.setMap(map);
+    }
+
+    // 颜色辅助方法
+    var colors = {};
+    var getColorByAdcode = function (adcode) {
+        if (!colors[adcode]) {
+            var gb = Math.random() * 155 + 50;
+            colors[adcode] = 'rgb(' + gb + ',' + gb + ',255)';
+        }
+        return colors[adcode];
+    };
+
+        var markerList=new Array();
+        site_towns.load({
+            callback: function(){
+                for (var i = 0; i <site_towns.getCount() ; i++) {
+                    var townname = site_towns.getAt(i).get("town_name");
+                    var adCode = site_towns.getAt(i).get("town_id");
+                    var townx = site_towns.getAt(i).get("town_x_num");
+                    var towny = site_towns.getAt(i).get("town_y_num");
+                    var type = site_towns.getAt(i).get("site_type");
+                    var marker = new AMap.Marker({
+                        position: new AMap.LngLat(townx, towny), // 经纬度对象
+                        title: townname
+                    });
+                    marker.setExtData(adCode);
+                    if (type=="A类站点") {
+                        marker.setIcon("/img/109.png");
+                    }else if (type=="B类站点") {
+                        marker.setIcon("/img/110.png");
+                    }else if (type=="C类站点") {
+                        marker.setIcon("/img/111.png");
+                    }else{
+                        marker.setIcon("/img/112.png");
+                    }
+
+                    markerList.push(marker);
+                    if (i==site_towns.getCount()-1){
+                        map.add(markerList);
+                        mk();
+                    }
+
+
+                }
+            }
+        });
+        function mk() {
+            for (var i = 0; i <markerList.length ; i++) {
+                var mk=markerList[i];
+                mkEvent(mk);
+            }
+        };
+        function mkEvent(mk) {
+            mk.on("click", function(){
+                console.log(mk);
+                map.destroy()
+                center=mk.getPosition( )
+                createMap();
+                adCode = mk.getExtData();
+                map.setCenter(center);
+                map.add(mk);
+                initPro(adCode, depth);
+            });
+        }
+    createMap();
+    initPro(adCode, depth);
+        map.setCenter(center);
+
+
+    })
+
+</script>
+
+</body>
+</html>

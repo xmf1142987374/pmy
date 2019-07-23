@@ -8,4 +8,5 @@ import java.util.List;
 public interface SiteService {
     public List<Site> getSiteNames();
     public List<Site> getSiteAreas();
+    public List<Site> getSiteByName(String sitename);
 }

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../extjs/resources/css/ext-all.css">
+    <script type="text/javascript" src="../extjs/ext-all.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+</head>
+<script type="text/javascript">
+    Ext.onReady(function(){
+       var sitename =parent.parent.Ext.getCmp("tabpanel").getActiveTab().title;
+        Ext.Ajax.request({
+            url:"/selSiteByName",
+            type:"post",
+            success:function (result,request) {
+                sitemssg= eval('('+result.responseText+')');
+                $(".site_id").text(sitemssg[0].site_id);
+                $(".site_name").text(sitemssg[0].site_name);
+                $(".site_type").text(sitemssg[0].site_type);
+                $(".site_desc").text(sitemssg[0].site_desc);
+                $(".town_x_num").text(sitemssg[0].town_x_num);
+                $(".town_y_num").text(sitemssg[0].town_y_num);
+            },
+            failure:function () {
+                alert("失败")
+            },
+            params:{
+               sitename:sitename
+            }
+        });
+    })
+</script>
+<body>
+<div style="height: 300px">放图片</div>
+<table style="width: 600px;margin: 0 auto" class="table table-hover table-bordered table-responsive">
+    <tr>
+        <td colspan="2" class=" col-lg-2 col-xs-2 col-md-2 col-sm-2">站点类型:</td>
+        <td class="site_type" colspan="2" class="col-lg-10 col-xs-10 col-md-10 col-sm-10">
+        </td>
+    </tr>
+    <tr>
+        <td class=" col-lg-2 col-xs-2 col-md-2 col-sm-2">站点编号:</td>
+        <td class="site_id" class="col-lg-4 col-xs-4 col-md-4 col-sm-4"></td>
+        <td class=" col-lg-2 col-xs-2 col-md-2 col-sm-2">站点名称:</td>
+        <td class="site_name" class="col-lg-4 col-xs-4 col-md-4 col-sm-4"></td>
+    </tr>
+    <tr>
+        <td class=" col-lg-2 col-xs-2 col-md-2 col-sm-2">站点管理员:</td>
+        <td class="uname" class="col-lg-4 col-xs-4 col-md-4 col-sm-4"></td>
+        <td class=" col-lg-2 col-xs-2 col-md-2 col-sm-2">联系方式:</td>
+        <td class="user_tel" class="col-lg-4 col-xs-4 col-md-4 col-sm-4"></td>
+    </tr>
+    <tr>
+        <td class=" col-lg-2 col-xs-2 col-md-2 col-sm-2">所属乡镇:</td>
+        <td class="col-lg-4 col-xs-4 col-md-4 col-sm-4"></td>
+        <td class=" col-lg-2 col-xs-2 col-md-2 col-sm-2">所属村:</td>
+        <td class="col-lg-4 col-xs-4 col-md-4 col-sm-4"></td>
+    </tr>
+    <tr>
+        <td class="town_x_num" class=" col-lg-2 col-xs-2 col-md-2 col-sm-2">经度:</td>
+        <td class="col-lg-4 col-xs-4 col-md-4 col-sm-4"></td>
+        <td class=" col-lg-2 col-xs-2 col-md-2 col-sm-2">纬度:</td>
+        <td class="town_y_num" class="col-lg-4 col-xs-4 col-md-4 col-sm-4"></td>
+    </tr>
+    <tr>
+        <td colspan="2" class=" col-lg-2 col-xs-2 col-md-2 col-sm-2">站点描述:</td>
+        <td class="site_desc" colspan="2" class="col-lg-10 col-xs-10 col-md-10 col-sm-10">
+        </td>
+    </tr>
+
+</table>
+</body>
+</html>

@@ -23,35 +23,58 @@
       },
       //autoLoad:true
     });
-    var  node="";
+
     site_areas.load();
+    var  node="";
 
 
 
 
   Ext.create(Ext.container.Viewport, {
     layout: "border",
-    items: [{
-      region:"north",
-      height:30,
-      items:[{
-        xtype:"checkboxgroup",
-        width:400,
-        items:[{
-          icon:"img/100.png",
-          boxLabel:"A类站点"
-        },{
-          icon:"../img/101.png",
-          boxLabel:"B类站点"
-        },{
-          icon:"../img/102.png",
-          boxLabel:"C类站点"
-        },{
-          icon:"../img/103.png",
-          boxLabel:"D类站点"
-        }]
-      }]
-    },{
+    items: [
+      //       {
+      // region:"north",
+      // height:30,
+      // items:[{
+      //     icon:"img/100.png",
+      //   xtype:"checkboxgroup",
+      //   width:400,
+      //   items:[
+        //         {
+        //   listeners : {
+        //     change:function(el,checked){
+        //       if(checked){
+        //        console.log(Ext.getCmp("ditu").html);
+        //       }else {
+        //         console.log(Ext.getCmp("ditu").html);
+        //       }
+        //     }
+        //   },
+        //   icon:"img/100.png",
+        //   checked: true,
+        //   inputValue: '1',
+        //   boxLabel:"A类站点"
+        // },{
+        //   icon:"../img/101.png",
+        //   checked: true,
+        //   nputValue: '2',
+        //   boxLabel:"B类站点"
+        // },{
+        //   icon:"../img/102.png",
+        //   checked: true,
+        //   nputValue: '3',
+        //   boxLabel:"C类站点"
+        // }
+    //     ,{
+    //       icon:"../img/103.png",
+    //       checked: true,
+    //       nputValue: '4',
+    //       boxLabel:"D类站点"
+    //     }]
+    //   }]
+    // },
+          {
       title:"站点区域",
       region:"east",
       width:200,
@@ -74,8 +97,7 @@
                     title:id.text,
                     closable:true,
                     id:id.id,
-                    html:id.text+"页面",
-                    // items:[new mf.three()]
+                    html:"<iframe src='html/site.html' width='100%' height='100%'></iframe>",
                   });
                   tabpanel.setActiveTab(t);
                 }
@@ -83,6 +105,7 @@
             }
           },
           id:"cs",
+          rootVisible: false,
           root:{
             text:"长沙县",
             expand:true,
@@ -93,7 +116,18 @@
     },{
       region:"center",
       xtype:"tabpanel",
-      id:"tabpanel"
+      id:"tabpanel",
+        listeners: {
+          click: {
+            element:'el',
+            fn: function(){history.go(0);}
+          }
+        },
+      items:[{
+        title:"刷新",
+        icon: "../img/57.png",
+        html:"<iframe src='./rmap.html' width='100%' height='100%'></iframe>"
+      }]
     }]
   });
 

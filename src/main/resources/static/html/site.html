@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../extjs/resources/css/ext-all.css">
+    <script type="text/javascript" src="../extjs/ext-all.js"></script>
+</head>
+<script type="text/javascript">
+    Ext.onReady(function(){
+        new Ext.tab.Panel({
+            height:650,
+            renderTo:Ext.getBody(),
+            items:[{
+                title:"站点基础信息",
+                html:"<iframe src='./message.html' width='100%' height='100%'></iframe>"
+            },{
+                title:"站点监测",
+
+            },{
+                title:"动力设备",
+                html:"<iframe src='./device.html' width='100%' height='100%'></iframe>"
+
+            },{
+                title:"巡检工单",
+
+            },{
+                title:"站点QOs",
+
+            },{
+                title:"考勤纪录",
+
+            }]
+        })
+    })
+</script>
+<body>
+</body>
+</html>
