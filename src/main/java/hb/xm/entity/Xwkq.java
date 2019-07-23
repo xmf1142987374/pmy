@@ -1,9 +1,6 @@
 package hb.xm.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 //站点考勤纪录
 @Entity

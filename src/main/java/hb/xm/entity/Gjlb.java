@@ -1,6 +1,5 @@
 package hb.xm.entity;
 
-import org.springframework.stereotype.Controller;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +11,14 @@ import javax.persistence.Table;
 @Table(name = "iotp_warning")
 public class Gjlb {
     @Id
+    @Column(name = "warning_ID")//告警ID
+    private Integer warning_id;
+
     @Column(name = "warning_type")//告警分类
     private String warning_type;
+
+    // @Column(name = "SITE_LOCATION")//乡镇
+    // private String site_location;
 
     @Column(name = "site_id ")//站点ID
     private String site_id;
@@ -33,8 +38,16 @@ public class Gjlb {
     @Column(name = "operate_time")//告警时间
     private String operate_time;
 
-    public Gjlb(){
-        
+    public Gjlb() {
+
+    }
+
+    public Integer getWarning_id() {
+        return warning_id;
+    }
+
+    public void setWarning_id(Integer warning_id) {
+        this.warning_id = warning_id;
     }
 
     public String getWarning_type() {
@@ -44,6 +57,14 @@ public class Gjlb {
     public void setWarning_type(String warning_type) {
         this.warning_type = warning_type;
     }
+
+    // public String getSite_location() {
+    //     return site_location;
+    // }
+    //
+    // public void setSite_location(String site_location) {
+    //     this.site_location = site_location;
+    // }
 
     public String getSite_id() {
         return site_id;

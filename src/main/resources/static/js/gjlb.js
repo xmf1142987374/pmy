@@ -4,9 +4,8 @@ Ext.define("gjgl.gjlb", {
     id: 'gjlb',
     frame: true,
     initComponent: function () {
-        var ds = new Ext.data.Store({
-
-            fields: ["warning_type", "site_id", "warning_level", "warning_desc","is_valid","warning_state","operate_time"],
+        var store = new Ext.data.Store({
+            fields: ["warning_id","site_location","warning_type", "site_id", "warning_level", "warning_desc", "is_valid", "warning_state", "operate_time", "cz"],
             proxy: {
                 type: 'ajax',
                 url: 'findAll',
@@ -26,29 +25,19 @@ Ext.define("gjgl.gjlb", {
                 name: "gjvalue"
             }]
         });
-        var gj = Ext.create(Ext.data.Store, {
-            model: "gjmodel",
-            data: [{
-                gj: "水流量为零告警男",
-            }, {
-                gj: "水流量小于阈值告警",
-            },{
-                gj:"水流量小于下限告警",
-            },{
-                gj:"水流量大于上限告警",
-            },{
-                gj:"无水流量数据告警",
-            },{
-                gj:"动力设备24小时未开启告警",
-            },{
-                gj:"配电箱非法开启告警",
-            },{
-                gj:"考勤次数不达标告警",
-            },{
-                gj:"无效考勤告警",
-            },{
-                gj:"工单处理超时告警",
-            }]
+        //下拉告警列表数据
+        var gj = Ext.create('Ext.data.Store', {
+            fields: ["warning_type"],
+            proxy: {
+                type: "ajax",
+                url: "findAll",
+                reader: {
+                    type: "json",
+                    totalProperty: "totalCount",
+                    root: "data"
+                }
+            },
+            autoLoad: true
         });
         Ext.regModel("zdmodel", {
             fields: [{
@@ -57,18 +46,21 @@ Ext.define("gjgl.gjlb", {
                 name: "zdvalue"
             }]
         });
-        var zd = Ext.create(Ext.data.Store, {
-            model: "zdmodel",
-            data: [{
-                zd: "A站点",
-            },{
-                zd:'B站点',
-            },{
-                zd:"C站点",
-            },{
-                zd:"D站点",
-            }]
+        //站点下拉数据
+        var site_names = Ext.create('Ext.data.Store', {
+            fields: ['site_name'],
+            proxy: {
+                type: "ajax",
+                url: "selSiteAreas",
+                reader: {
+                    type: "json",
+                    totalProperty: "totalCount",
+                    root: "data"
+                }
+            },
+            autoLoad: true
         });
+
         Ext.apply(this, {
             tbar: [{
                 text: '无效告警',
@@ -79,6 +71,24 @@ Ext.define("gjgl.gjlb", {
             }, {
                 text: '删除',
                 icon: "img/15.png",
+                handler: function () {
+                    var selectdata = Ext.getCmp("gjlb").getSelectionModel().getSelection();
+                    var data = new Array();
+                    for (var i = 0; i < selectdata.length; i++) {
+                        data.push(selectdata[i].data.warning_id);
+                    }
+
+                    Ext.Ajax.request({
+                        url: "delegjlb",
+                        type: "post",
+                        success: function () {
+                            store.reload();
+                        },
+                        params: {
+                            data: data
+                        }
+                    });
+                }
             }, {
                 xtype: "combo",
                 labelAlign: "right",
@@ -87,28 +97,23 @@ Ext.define("gjgl.gjlb", {
                 store: gj,
                 queryMode: "local",
                 triggerAction: "all",
-                displayField: "gj",
-                valueField: "gjvalue"
+                displayField: "warning_type",
+
             }, {
                 xtype: "combo",
                 width: 200,
                 fieldLabel: "乡镇",
-                labelAlign: "right"
-            }, {
-                xtype: "combo",
-                width: 180,
-                fieldLabel: "村",
-                labelAlign: "right"
-            }, {
-                xtype: "combo",
                 labelAlign: "right",
-                width: 180,
+
+
+            },{
+                xtype: "combo",
                 fieldLabel: "站点",
-                store: zd,
+                store: site_names,
                 queryMode: "local",
                 triggerAction: "all",
-                displayField: "zd",
-                valueField: "zdvalue"
+                displayField: "site_name",
+                labelAlign: "right"
             }, {
                 xtype: "combo",
                 width: 200,
@@ -130,18 +135,18 @@ Ext.define("gjgl.gjlb", {
                     return rowIndex + 1;
                 }
             }, {
+                header: "告警id",
+                hidden: true,
+                dataIndex: "warning_id"
+            }, {
                 header: '告警分类',
                 sortable: true,
                 dataIndex: 'warning_type'
             }, {
                 header: '乡镇名',
                 sortable: true,
-                dataIndex: ''
-            }, {
-                header: '村名',
-                sortable: true,
-                dataIndex: ''
-            }, {
+                dataIndex: 'site_location'
+            },{
                 header: '站点名称',
                 sortable: true,
                 dataIndex: 'site_id'
@@ -166,31 +171,21 @@ Ext.define("gjgl.gjlb", {
                 sortable: true,
                 dataIndex: 'operate_time'
             }, {
-                header: '操作',
-                xtype: 'actioncolumn',
-                items: [{
-                    icon: '',
-                    handler: function () {
-                        alert("修改");
-                    }
-                }, {
-                    icon: '',
-                    handler: function () {
-                        alert("删除");
-                    }
-                }]
+                text: '操作',
+                xtype: "actioncolumn",
+
             }],
-            store: ds,
+            store: store,
             bbar: new Ext.PagingToolbar({
                 pageSize: 20,
-                store: ds,
+                store: store,
                 displayInfo: true,
                 displayMsg: '当前显示第{0}条到第{1}条记录，总共有{2}条记录',
                 emptyMsg: '无记录'
             })
         });
         this.callParent(arguments);
-        ds.load({
+        store.load({
             params: {
                 start: 0,
                 limit: 20

@@ -14,13 +14,12 @@ public class SiteServiceImpl implements SiteService {
     private SiteDao siteDao;
 
     @Override
-    public List<Site> getSites() {
+    public List<Site> getSiteNames() {
         return siteDao.findAll();
     }
 
     @Override
-    public List<String> getSiteNames() {
-        // return siteDao.getSiteNames();
-        return  null;
+    public List<Site> getSiteAreas() {
+        return siteDao.getSiteAreas();
     }
 }
