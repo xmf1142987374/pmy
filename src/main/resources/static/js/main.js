@@ -301,13 +301,26 @@ Ext.onReady(function () {
                             if (Ext.getCmp(id.id)) {
                                 tabpanel.setActiveTab(Ext.getCmp(id.id));
                             } else {
-                                var t = tabpanel.add({
-                                    title: id.text,
-                                    closable: true,
-                                    id: id.id,
-                                    html: id.text + "页面",
-                                    // items:[new mf.three()]
-                                });
+                                switch (id.id) {
+                                    case "20":
+                                        var t = tabpanel.add({
+                                            title: id.text,
+                                            closable: true,
+                                            id: id.id,
+                                            layout: "fit",
+                                            items: [new mf.zd()]
+                                        });
+                                        break;
+                                    case "22":
+                                        var t = tabpanel.add({
+                                            title: id.text,
+                                            closable: true,
+                                            id: id.id,
+                                            layout: "fit",
+                                            items: [new mf.ll()]
+                                        });
+                                        break;
+                                }
                                 tabpanel.setActiveTab(t);
                             }
                         }
@@ -326,7 +339,7 @@ Ext.onReady(function () {
                             text: "人员管理",
                             id: "21",
                             leaf: true
-                        }, {
+                        },{
                             icon: "../img/40.png",
                             text: "流量报警设置",
                             id: "22",
