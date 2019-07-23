@@ -22,4 +22,14 @@ public class XwkqServiceImpl implements XwkqService {
     public List<Xwkq> getXwkq() {
         return xwkqDao.findAll();
     }
+
+    @Override
+    public List<Xwkq> getSiteXwkqfy(String sitelocation, Integer start, Integer limit) {
+        return xwkqDao.getSiteXwkqfy(sitelocation, start, limit);
+    }
+
+    @Override
+    public List<Xwkq> getSiteXwkqfy(String sitelocation) {
+        return xwkqDao.getSiteXwkqfy(sitelocation);
+    }
 }

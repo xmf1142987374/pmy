@@ -72,7 +72,26 @@ public class XwkqController {
             data.add(jsonObject);
         }
         String datas="{totalCount:"+xwkqService.getXwkq().size()+",data:"+data.toString()+"}";
-        System.out.println(data);
+        return datas;
+    }
+
+    //ajax请求查询站点考勤纪录数据
+    @ResponseBody
+    @RequestMapping("selSiteXwkq")
+    public String selSiteXwkq(@RequestParam("sitelocation")String sitelocation,@RequestParam("start")Integer start, @RequestParam("limit") Integer limit){
+        List<User> users=userService.getUsers();
+        List<Xwkq> xwkqs=xwkqService.getSiteXwkqfy(sitelocation,start,limit);
+        JSONArray data= new JSONArray();
+        for (Xwkq xwkq:xwkqs){
+            JSONObject jsonObject=JSONObject.fromObject(xwkq);
+            for (User user :users){
+                if (user.getUserid().toString().equals(xwkq.getUser_id().toString())){
+                    jsonObject.put("uname", user.getUname());
+                }
+            }
+            data.add(jsonObject);
+        }
+        String datas="{totalCount:"+xwkqService.getSiteXwkqfy(sitelocation).size()+",data:"+data.toString()+"}";
         return datas;
     }
 }

@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-
+//告警列表数据处理
 @Controller
 public class GjlbController {
     @Autowired
     private GjlbService gjlbService;
     @Autowired
     private SiteService siteService;
-
+    //ajax请求查询告警列表所有数据
     @ResponseBody
     @RequestMapping("findAll")
     public String findAll() {
@@ -43,7 +43,7 @@ public class GjlbController {
         return data.toString();
     }
 
-    //ajax请求删除角色
+    //ajax请求删除告警列表选择数据
     @ResponseBody
     @RequestMapping("delegjlb")
     public void deleteGjlb(@RequestParam("data") Integer[] data) {
