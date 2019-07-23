@@ -42,6 +42,9 @@ Ext.define("mf.rz",{
         Ext.apply(this,{
             tbar:[{
                 text:"刷新",
+                handler:function(){
+                    store.reload();
+                },
                 icon:"img/57.png"
             }],
             selType:"checkboxmodel",

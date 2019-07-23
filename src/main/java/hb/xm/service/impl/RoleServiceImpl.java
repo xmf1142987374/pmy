@@ -32,4 +32,9 @@ public class RoleServiceImpl implements RoleService {
     public void deleteRole(Integer role_id) {
         roleDao.deleteById(role_id);
     }
+
+    @Override
+    public void updateRole(Role role) {
+        roleDao.saveAndFlush(role);
+    }
 }

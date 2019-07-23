@@ -39,7 +39,13 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(Integer userid, String uname, String username, String password, String user_dept, String user_sex, String user_tel, String user_phone, String user_state,  String create_time) {
+    public User(String uname, String username, String user_sex) {
+        this.uname = uname;
+        this.username = username;
+        this.user_sex = user_sex;
+    }
+
+    public User(Integer userid, String uname, String username, String password, String user_dept, String user_sex, String user_tel, String user_phone, String user_state, String create_time) {
         this.userid = userid;
         this.uname = uname;
         this.username = username;
