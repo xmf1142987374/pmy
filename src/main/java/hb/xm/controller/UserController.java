@@ -1,6 +1,7 @@
 package hb.xm.controller;
 
 import hb.xm.common.Ip;
+import hb.xm.dao.UserDao;
 import hb.xm.entity.Dept;
 import hb.xm.entity.User;
 import hb.xm.service.LogService;
@@ -10,6 +11,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,7 +72,7 @@ public class UserController {
     //ajax请求添加用户
     @ResponseBody
     @RequestMapping("adduser")
-    public void addUser(@RequestParam("user_id") Integer user_id, @RequestParam("user_name") String user_name, @RequestParam("user_password") String user_password, @RequestParam("user_login_name") String user_login_name, @RequestParam("user_department") String user_department, @RequestParam("user_gender") String user_gender, @RequestParam("user_tel") String user_tel, @RequestParam("user_phone") String user_phone,HttpSession session, HttpServletRequest request){
+    public void addUser(@RequestParam("user_id") Integer user_id, @RequestParam("user_name") String user_name, @RequestParam("password") String user_password, @RequestParam("user_login_name") String user_login_name, @RequestParam("user_department") String user_department, @RequestParam("user_gender") String user_gender, @RequestParam("user_tel") String user_tel, @RequestParam("user_phone") String user_phone,HttpSession session, HttpServletRequest request){
         Date date =new Date();
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String userDate=sdf.format(date);
@@ -79,7 +81,20 @@ public class UserController {
         Integer userId=u.getUserid();
         String userName=u.getUname();
         String ip = request.getHeader("x-forwarded-for");
-        ip= Ip.getIp(request, ip);
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip  = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip  = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip  = request.getRemoteAddr();
+        }
+        if (ip.contains(",")) {
+            ip =ip.split(",")[0];
+        } else {
+            ip =ip;
+        }
         userService.addUser(user);
         logService.addLog2(userName,"1","添加用户",userId,userDate,ip,"1");
 
@@ -146,5 +161,32 @@ public class UserController {
                 }
             }
         }
+    }
+
+    //修改用户
+    @ResponseBody
+    @RequestMapping("updateuser")
+    public void updateUser(@RequestParam("userid") Integer userid, @RequestParam("uname") String uname, @RequestParam("password") String password, @RequestParam("username") String username, @RequestParam("user_dept") String user_dept, @RequestParam("user_sex") String user_sex, @RequestParam("user_tel") String user_tel, @RequestParam("user_phone") String user_phone,@RequestParam("user_state") String user_state,@RequestParam("create_time") String create_time){
+        User user=new User(userid,uname,username,password,user_dept,user_sex,user_tel,user_phone,user_state,create_time);
+        userService.updateUser(user);
+    }
+
+    //ajax高级查询用户
+    @ResponseBody
+    @RequestMapping("GJseluser")
+    public String findGJAll(@RequestParam("uname")String uname,@RequestParam("username")String username,@RequestParam("user_sex")String user_sex){
+        // System.out.println(uname);
+        // System.out.println(username);
+        // System.out.println(user_sex);
+        User user=new User(uname,username,user_sex);
+        //Page<User> users=userService.gjSeleteUser(user,start,limit);
+        List<User> users=userService.gjSeleteUser(user);
+        for(User u:users){
+            System.out.println(u.getUserid()+"\t"+u.getUsername());
+        }
+        JSONArray datas=JSONArray.fromObject(users);
+        String totalCount="{totalCount:"+userService.getUsers().size()+"}";
+        String data="{totalCount:"+userService.getUsers().size()+",data:"+datas.toString()+"}";
+        return data;
     }
 }

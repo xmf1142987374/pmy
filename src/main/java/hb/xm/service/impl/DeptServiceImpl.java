@@ -33,4 +33,11 @@ public class DeptServiceImpl implements DeptService {
     public void delectDept(Integer dep_id) {
         deptDao.deleteById(dep_id);
     }
+
+    @Override
+    public void updateDept(Dept dept) {
+        deptDao.saveAndFlush(dept);
+    }
+
+
 }

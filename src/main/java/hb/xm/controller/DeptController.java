@@ -51,12 +51,26 @@ public class DeptController {
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String userDate=sdf.format(date);
         User user= (User) session.getAttribute("loginuser");
-        String userName=user.getUsername();
+        String userName=user.getUname();
         Dept dept =new Dept(dep_id,dep_name,dep_desc,dep_state,userName,userDate);
         Integer userId=user.getUserid();
         String uName=user.getUname();
         String ip = request.getHeader("x-forwarded-for");
-        ip= Ip.getIp(request, ip);
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip  = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip  = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip  = request.getRemoteAddr();
+        }
+        if (ip.contains(",")) {
+            ip =ip.split(",")[0];
+        } else {
+            ip =ip;
+        }
+        System.out.println(ip);
         deptService.addDept(dept);
         logService.addLog2(uName,"1","添加部门",userId,userDate,ip,"1");
     }
@@ -111,5 +125,18 @@ public class DeptController {
                 }
             }
         }
+    }
+
+    //修改部门
+    @ResponseBody
+    @RequestMapping("updatedept")
+    public void updateDept(@RequestParam("dep_id") Integer dep_id, @RequestParam("dep_name") String dep_name, @RequestParam("dep_desc") String dep_desc, @RequestParam("dep_state") String dep_state,@RequestParam("create_user") String create_user,@RequestParam("create_time") String create_time, HttpSession session, HttpServletRequest request){
+        User user=(User) session.getAttribute("loginuser");
+        String userName=user.getUname();
+        Date date=new Date();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String userDate=sdf.format(date);
+        Dept dept=new Dept(dep_id,dep_name,dep_desc,dep_state,create_user,create_time,userName,userDate);
+        deptService.updateDept(dept);
     }
 }

@@ -1,5 +1,6 @@
 package hb.xm.controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import hb.xm.common.Ip;
 import hb.xm.entity.Dept;
 import hb.xm.entity.Role;
@@ -55,7 +56,20 @@ public class RoleController {
         Integer userId=user.getUserid();
         String uName=user.getUname();
         String ip = request.getHeader("x-forwarded-for");
-        ip= Ip.getIp(request, ip);
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip  = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip  = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip  = request.getRemoteAddr();
+        }
+        if (ip.contains(",")) {
+            ip =ip.split(",")[0];
+        } else {
+            ip =ip;
+        }
         roleService.addRole(role);
         logService.addLog2(uName,"1","添加角色",userId,roleDate,ip,"1");
 
@@ -101,5 +115,24 @@ public class RoleController {
                 }
             }
         }
+    }
+
+    //修改部门
+    @ResponseBody
+    @RequestMapping("updaterole")
+    public void updateDept(@RequestParam("role_id") Integer role_id, @RequestParam("role_name") String role_name, @RequestParam("role_state") String role_state, @RequestParam("create_time") String create_time,@RequestParam("create_user") String create_user,HttpSession session, HttpServletRequest request){
+        System.out.println(role_id);
+        System.out.println(role_name);
+        System.out.println(role_state);
+        System.out.println(create_time);
+        System.out.println(create_user);
+        User user=(User) session.getAttribute("loginuser");
+        String userName=user.getUname();
+        Date date=new Date();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String userDate=sdf.format(date);
+        Role role=new Role(role_id,role_name,role_state,create_time,create_user,userName,userDate);
+
+        roleService.updateRole(role);
     }
 }

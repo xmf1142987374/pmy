@@ -44,6 +44,17 @@ public class Dept implements Serializable {
         this.create_time = create_time;
     }
 
+    public Dept(Integer dep_id, String dep_name, String dep_desc, String dep_state, String create_user, String create_time, String modify_user, String modify_time) {
+        this.dep_id = dep_id;
+        this.dep_name = dep_name;
+        this.dep_desc = dep_desc;
+        this.dep_state = dep_state;
+        this.create_user = create_user;
+        this.create_time = create_time;
+        this.modify_user = modify_user;
+        this.modify_time = modify_time;
+    }
+
     public Integer getDep_id() {
         return dep_id;
     }

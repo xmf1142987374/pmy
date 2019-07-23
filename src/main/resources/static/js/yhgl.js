@@ -8,12 +8,12 @@ Ext.define("mf.three", {
     // width:1350,
     // height:650,
     initComponent: function () {
-
+        var store;
 
         var pages = 4; //每页显示的条数
-        var store = Ext.create('Ext.data.Store', {
+        store = Ext.create('Ext.data.Store', {
             id: "yhfy",
-            fields: ["userid", "uname", "user_dept", "username", "user_sex", "user_tel", "user_phone", "user_state"],
+            fields: ["userid", "uname", "user_dept", "username", "password", "user_sex", "user_tel", "user_phone", "user_state","create_time"],
             proxy: {
                 type: "ajax",
                 url: "seluser",
@@ -34,24 +34,14 @@ Ext.define("mf.three", {
             }
         });
 
-        Ext.regModel("xbmodel", {
-            fields: [{
-                name: "xb"
-            }, {
-                name: "xbvalue"
-            }]
+        var states =Ext.create(Ext.data.Store,{
+            fields:['sex'],
+            data:[
+                {"sex":"男"},
+                {"sex":"女"}
+            ]
         });
 
-        var xb = Ext.create(Ext.data.Store, {
-            model: "xbmodel",
-            data: [{
-                xb: "男",
-                //xbvalue:"1"
-            }, {
-                xb: "女",
-                //xbvalue:"2"
-            }]
-        });
         //界面
         Ext.apply(this, {
             tbar: [{
@@ -141,13 +131,133 @@ Ext.define("mf.three", {
                                 win.close();
                             }
                         }]
-                    })
+                    });
                     win.add(form);
                     win.show();
                 }
             }, {
                 text: "修改",
-                icon: "img/50.png"
+                icon: "img/50.png",
+                handler:function(){
+                    var selectdata=Ext.getCmp("mf").getSelectionModel().getSelection();
+                    //console.log(selectdata[0].data.dep_id);
+
+                    if(selectdata.length>1){
+                        alert("只能一个一个的修改哟!");
+                    }else if(selectdata.length<1){
+                        alert("请选择一个修改哟!");
+                    }else{
+                        var uid=selectdata[0].data.userid;
+                        var u_name=selectdata[0].data.uname;
+                        var user_name=selectdata[0].data.username;
+                        var pword=selectdata[0].data.password;
+                        var u_dept=selectdata[0].data.user_dept;
+                        var u_sex=selectdata[0].data.user_sex;
+                        var u_tel=selectdata[0].data.user_tel;
+                        var u_phone=selectdata[0].data.user_phone;
+                        var u_state=selectdata[0].data.user_state;
+                        var c_time=selectdata[0].data.create_time;
+                        //console.log(c_time);
+                        //console.log(c_user);
+                        var win=new Ext.Window({
+                            title:'修改用户',
+                            width:300,
+                            height:300,
+                            frame:true
+                        });
+                        var form= new Ext.panel.Panel({
+                            border:false,
+                            frame:true,
+                            layout:"form",
+                            items:[{
+                                xtype:"textfield",
+                                id:"id",
+                                fieldLabel:"工号",
+                                disabled:true,
+                                value:uid
+                            },{
+                                xtype:"textfield",
+                                id:"name",
+                                fieldLabel:"姓名",
+                                value:u_name
+                            },{
+                                xtype:"textfield",
+                                id:"bm",
+                                fieldLabel:"部门",
+                                value:u_dept
+                            },{
+                                xtype:"textfield",
+                                id:"zh",
+                                fieldLabel:"登录账号",
+                                value:user_name
+                            },{
+                                xtype:"textfield",
+                                id:"xb",
+                                fieldLabel:"性别",
+                                value:u_sex
+                            },{
+                                xtype:"textfield",
+                                id:"dh",
+                                fieldLabel:"电话",
+                                value:u_tel
+                            },{
+                                xtype:"textfield",
+                                id:"sj",
+                                fieldLabel:"手机号",
+                                value:u_phone
+                            },{
+                                xtype:"textfield",
+                                id:"zt",
+                                fieldLabel:"状态",
+                                value:u_state
+                            }],
+                            buttons:[{
+                                text:'确定修改',
+                                handler:function () {
+                                    var userid=Ext.getCmp("id").value;
+                                    var uname=Ext.getCmp("name").value;
+                                    var username=Ext.getCmp("zh").value;
+                                    var user_dept=Ext.getCmp("bm").value;
+                                    var user_sex=Ext.getCmp("xb").value;
+                                    var user_tel=Ext.getCmp("dh").value;
+                                    var user_phone=Ext.getCmp("sj").value;
+                                    var user_state=Ext.getCmp("zt").value;
+                                    Ext.Ajax.request({
+                                        url:"updateuser",
+                                        type:"post",
+                                        success:function(){
+                                            alert("成功");
+                                            store.load();
+                                            win.close();
+                                        },
+                                        failure:function(){
+                                            alert("失败");
+                                        },
+                                        params:{
+                                            userid : userid,
+                                            uname : uname,
+                                            username : username,
+                                            password : pword,
+                                            user_dept : user_dept,
+                                            user_sex : user_sex,
+                                            user_tel : user_tel,
+                                            user_phone : user_phone,
+                                            user_state : user_state,
+                                            create_time : c_time
+                                        }
+                                    })
+                                }
+                            },{
+                                text:"取消",
+                                handler:function(){
+                                    win.close();
+                                }
+                            }]
+                        });
+                        win.add(form);
+                        win.show();
+                    }
+                }
             }, {
                 text: "导出Excel",
                 icon: "img/51.png",
@@ -251,32 +361,74 @@ Ext.define("mf.three", {
                 }
             },*/ {
                 text: "刷新",
+                handler:function(){
+                    store.reload();
+                },
                 icon: "img/57.png"
             }, "-", "->", {
                 xtype: "textfield",
                 labelAlign: "right",
                 width: 200,
+                id:"u_xm",
                 fieldLabel: "姓名"
             }, {
                 xtype: "textfield",
                 labelAlign: "right",
                 width: 200,
+                id:"u_zh",
                 fieldLabel: "登录账户"
             }, {
                 xtype: "combo",
                 labelAlign: "right",
                 width: 150,
+                id:"u_xb",
                 fieldLabel: "性别",
-                store: xb,
+                store: states,
                 queryMode: "local",
-                triggerAction: "all",
-                displayField: "xb",
-                valueField: "xbvalue"
+                displayField: "sex"
             }, {
                 text: "查询",
                 icon: "img/4.png",
                 handler: function () {
-                    alert(11);
+                    var uname=Ext.getCmp("u_xm").value;
+                    var username=Ext.getCmp("u_zh").value;
+                    var user_sex=Ext.getCmp("u_xb").value;
+                    console.log(uname);
+                    console.log(username);
+                    console.log(user_sex);
+                    /*store = Ext.create('Ext.data.Store', {
+                        id: "yhfy",
+                        fields: ["userid", "uname", "user_dept", "username", "password", "user_sex", "user_tel", "user_phone", "user_state","create_time"],
+                        proxy: {
+                            type: "ajax",
+                            url: "GJseluser",
+                            reader: {
+                                type: "json",
+                                totalProperty: "totalCount",
+                                root: "data"
+                            }
+                        },
+                        pageSize: pages,
+                        autoLoad: false
+                    });*/
+                    Ext.Ajax.request({
+                        url:"GJseluser",
+                        type:"post",
+                        success:function(){
+                            alert("查询成功");
+                            store.reload();
+                            //store.load();
+                            //win.close();
+                        },
+                        failure:function(){
+                            alert("查询失败");
+                        },
+                        params:{
+                            uname : uname,
+                            username : username,
+                            user_sex : user_sex
+                        }
+                    })
                 }
             }],
             selType: "checkboxmodel",
@@ -352,7 +504,6 @@ Ext.define("mf.three", {
             }),
             store: store
         });
-
         this.callParent(arguments);
     }
     //this.callParent(arguments)

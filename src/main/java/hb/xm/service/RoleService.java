@@ -12,4 +12,6 @@ public interface RoleService {
     public void addRole(Role role);
 
     public void deleteRole(Integer role_id);
+
+    public void updateRole(Role role);
 }

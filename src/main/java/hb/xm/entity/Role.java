@@ -38,6 +38,16 @@ public class Role implements Serializable {
         this.create_user = create_user;
     }
 
+    public Role(Integer role_id, String role_name, String role_state, String create_time, String create_user, String modify_user, String modify_time) {
+        this.role_id = role_id;
+        this.role_name = role_name;
+        this.role_state = role_state;
+        this.create_time = create_time;
+        this.create_user = create_user;
+        this.modify_user = modify_user;
+        this.modify_time = modify_time;
+    }
+
     public Integer getRole_id() {
         return role_id;
     }
