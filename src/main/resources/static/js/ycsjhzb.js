@@ -1,4 +1,4 @@
-//巡维考勤界面
+//异常数据汇总表
 
 
 Ext.define("gjgl.ycsjhzb", {
@@ -43,11 +43,26 @@ Ext.define("gjgl.ycsjhzb", {
 //             }
 //         });
 //站点下拉数据
-        var zd = Ext.create('Ext.data.Store', {
-            fields: ['site_name', 'zqvalue'],
+        var ds = new Ext.data.Store({
+            fields: ["warning_id","site_location", "site_id", "warning_level", "warning_desc", "warning_state", "operate_time"],
             proxy: {
                 type: "ajax",
-                url: "selsitenames",
+                url: 'findAll',
+                reader: {
+                    type: "json",
+                    totalProperty: "totalCount",
+                    root: "data"
+                }
+            },
+            autoLoad: true
+        });
+
+        //下拉告警列表数据
+        var gj = Ext.create('Ext.data.Store', {
+            fields: ["warning_type"],
+            proxy: {
+                type: "ajax",
+                url: "findAll",
                 reader: {
                     type: "json",
                     totalProperty: "totalCount",
@@ -62,14 +77,18 @@ Ext.define("gjgl.ycsjhzb", {
             tbar: ["->", {
                 xtype: "combo",
                 fieldLabel: "告警分类",
+                labelAlign: "right",
+                store: gj,
+                queryMode: "local",
+                triggerAction: "all",
+                displayField: "warning_type",
 
             }, {
                 xtype: "combo",
                 fieldLabel: "乡镇",
-                store: zd,
                 queryMode: "local",
                 triggerAction: "all",
-                displayField: "",
+                displayField: "site_location",
                 labelAlign: "right"
             }, {
                 xtype: "datefield",
@@ -90,50 +109,50 @@ Ext.define("gjgl.ycsjhzb", {
                 text: "导出异常数据点位汇总表",
                 icon: "img/51.png"
             }],
-            selType: "checkboxmodel",
-            columns: [{
-                text: "乡镇名",
-                dataIndex: "",
-                align: "center",
-                flex: 3,
-                sortable: true
-            }, {
-                text: "村名",
-                dataIndex: "",
-                align: "center",
-                flex: 3,
-                sortable: true
-            }, {
-                text: "站点名称",
-                align: "center",
-                dataIndex: "",
-                flex: 3,
-                sortable: true
-            }, {
-                text: "告警级别",
-                align: "center",
-                dataIndex: "",
-                flex: 3,
-                sortable: true
-            }, {
-                text: "告警内容",
-                align: "center",
-                dataIndex: "",
-                flex: 3,
-                sortable: true
-            }, {
-                text: "是否处理",
-                align: "center",
-                dataIndex: "",
-                flex: 3,
-                sortable: true
-            }, {
-                text: "告警时间",
-                align: "center",
-                dataIndex: "",
-                flex: 3,
-                sortable: true
-            }],
+
+            columns: [
+                {
+                    header: "告警id",
+                    hidden: true,
+                    dataIndex: "warning_id"
+                }, {
+                    header: '乡镇名',
+                    dataIndex: 'site_location',
+                    align: "center",
+                    flex: 3,
+                    sortable: true
+                },{
+                    header: '站点名称',
+                    align: "center",
+                    dataIndex: "site_id",
+                    flex: 3,
+                    sortable: true
+                }, {
+                    header: '告警级别',
+                    align: "center",
+                    dataIndex: "warning_level",
+                    flex: 3,
+                    sortable: true
+                }, {
+                    header: '告警内容',
+                    align: "center",
+                    dataIndex: "warning_desc",
+                    flex: 3,
+                    sortable: true
+                }, {
+                    header: '是否处理',
+                    align: "center",
+                    dataIndex: "warning_state",
+                    flex: 3,
+                    sortable: true
+                }, {
+                    header: "告警时间",
+                    align: "center",
+                    dataIndex: "operate_time",
+                    flex: 3,
+                    sortable: true
+                }],
+            store: ds,
             bbar: new Ext.PagingToolbar({
                 // store:store,
                 displayInfo: true,
@@ -144,5 +163,11 @@ Ext.define("gjgl.ycsjhzb", {
         });
 
         this.callParent(arguments);
+        ds.load({
+            params: {
+                start: 0,
+                limit: 20
+            }
+        });
     }
 })
