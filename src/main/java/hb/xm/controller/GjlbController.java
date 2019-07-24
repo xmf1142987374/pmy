@@ -76,8 +76,6 @@ public class GjlbController {
 
         List<Gjlb> list=gjlbService.getGjlb();
         List<Site> sites = siteService.getSiteAreas();
-        System.out.println(list.size());
-        System.out.println(sites.size());
         for (int i = 0; i < sites.size(); i++) {
             HSSFRow temp_row=sheet.createRow(i + 1);
             temp_row.createCell(0).setCellValue(sites.get(i).getSite_location());
