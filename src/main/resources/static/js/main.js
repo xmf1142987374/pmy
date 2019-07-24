@@ -5,7 +5,7 @@ Ext.onReady(function () {
         layout: "border",
         items: [{
             region: "north",
-            html: "<b style='font-size: 40px'>环境设施管理系统</b><span id='admin' style='float: right;font-size: 15px;'>欢迎您admin</span>",
+            html: "<b style='font-size: 40px'>环境治理设施智能管理系统</b><span id='admin' style='float: right;font-size: 15px;'>欢迎您admin</span>",
             height: 80
         }, {
             region: "west",
@@ -34,7 +34,6 @@ Ext.onReady(function () {
                                     closable: true,
                                     id: id.id,
                                     html: id.text + "页面",
-                                    items: [new mf.three()]
                                 });
                                 tabpanel.setActiveTab(t);
                             }
@@ -199,16 +198,6 @@ Ext.onReady(function () {
                                 leaf: true
                             }, {
                                 icon: "../img/31.png",
-                                text: "村级多站点累计流量报表",
-                                id: "11",
-                                leaf: true
-                            }, {
-                                icon: "../img/31.png",
-                                text: "镇级各村累计流量报表",
-                                id: "12",
-                                leaf: true
-                            }, {
-                                icon: "../img/31.png",
                                 text: "县级各镇累计流量报表",
                                 id: "13",
                                 leaf: true
@@ -354,7 +343,8 @@ Ext.onReady(function () {
                                             closable: true,
                                             id: id.id,
                                             layout: "fit",
-                                            items: [new mf.bm()]
+                                            //items: [new mf.bm()]
+                                            html:"<iframe src='bm' style='width: 100%;height: 100%'></iframe>"
                                         });
                                         break;
                                     case "user":

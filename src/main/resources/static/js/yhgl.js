@@ -33,7 +33,6 @@ Ext.define("mf.three", {
                 limit: pages
             }
         });
-
         var states =Ext.create(Ext.data.Store,{
             fields:['sex'],
             data:[
@@ -393,42 +392,60 @@ Ext.define("mf.three", {
                     var uname=Ext.getCmp("u_xm").value;
                     var username=Ext.getCmp("u_zh").value;
                     var user_sex=Ext.getCmp("u_xb").value;
-                    console.log(uname);
-                    console.log(username);
-                    console.log(user_sex);
-                    /*store = Ext.create('Ext.data.Store', {
-                        id: "yhfy",
-                        fields: ["userid", "uname", "user_dept", "username", "password", "user_sex", "user_tel", "user_phone", "user_state","create_time"],
-                        proxy: {
-                            type: "ajax",
-                            url: "GJseluser",
-                            reader: {
-                                type: "json",
-                                totalProperty: "totalCount",
-                                root: "data"
-                            }
-                        },
-                        pageSize: pages,
-                        autoLoad: false
-                    });*/
-                    Ext.Ajax.request({
-                        url:"GJseluser",
-                        type:"post",
-                        success:function(){
-                            alert("查询成功");
-                            store.reload();
-                            //store.load();
-                            //win.close();
-                        },
-                        failure:function(){
-                            alert("查询失败");
-                        },
+                    // store = Ext.create('Ext.data.Store', {
+                    //     fields: ["userid", "uname", "user_dept", "username", "password", "user_sex", "user_tel", "user_phone", "user_state","create_time"],
+                    //     proxy: {
+                    //         type: "ajax",
+                    //         url: "GJseluser",
+                    //         reader: {
+                    //             type: "json",
+                    //             totalProperty: "totalCount",
+                    //             root: "data"
+                    //         }
+                    //     },
+                    //     pageSize: pages,
+                    //     autoLoad: false
+                    // });
+                    store.proxy.url="GJseluser";
+                    store.load({
                         params:{
+                            start:0,
+                            limit:pages,
                             uname : uname,
                             username : username,
                             user_sex : user_sex
                         }
-                    })
+                    });
+
+                    store.on("beforeload",function(){
+
+                        Ext.apply(store.proxy.extraParams, {
+                            uname : uname,
+                            username : username,
+                            user_sex : user_sex
+                        });
+
+                    });
+                        console.log(store);
+                        console.log(store.proxy);
+                    // Ext.Ajax.request({
+                    //     url:"GJseluser",
+                    //     type:"post",
+                    //     success:function(){
+                    //         alert("查询成功");
+                    //         store.reload();
+                    //         //store.load();
+                    //         //win.close();
+                    //     },
+                    //     failure:function(){
+                    //         alert("查询失败");
+                    //     },
+                    //     params:{
+                    //         uname : uname,
+                    //         username : username,
+                    //         user_sex : user_sex
+                    //     }
+                    // })
                 }
             }],
             selType: "checkboxmodel",
@@ -497,7 +514,8 @@ Ext.define("mf.three", {
                 }]
             }],
             bbar: new Ext.PagingToolbar({
-                store: store,
+                id:"bbar",
+                 store: store,
                 displayInfo: true,
                 displayMsg: "当前显示第{0}到{1}条记录,共有{1}条记录",
                 emptyMsg: "无记录"

@@ -21,6 +21,8 @@ public class Town {
     @Column(name = "TOWN_PID")
     private String town_pid;//村镇父级行政码
     private String site_type;
+    private String site_name;
+    private String site_desc;
 
     public Town() {
     }
@@ -33,6 +35,21 @@ public class Town {
         this.site_type = site_type;
     }
 
+    public String getSite_name() {
+        return site_name;
+    }
+
+    public void setSite_name(String site_name) {
+        this.site_name = site_name;
+    }
+
+    public String getSite_desc() {
+        return site_desc;
+    }
+
+    public void setSite_desc(String site_desc) {
+        this.site_desc = site_desc;
+    }
 
     public String getTown_id() {
         return town_id;

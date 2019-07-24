@@ -1,8 +1,5 @@
 package hb.xm.controller;
 
-import hb.xm.common.Ip;
-import hb.xm.dao.UserDao;
-import hb.xm.entity.Dept;
 import hb.xm.entity.User;
 import hb.xm.service.LogService;
 import hb.xm.service.UserService;
@@ -11,18 +8,19 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -59,7 +57,22 @@ public class UserController {
     //用户登录
     @RequestMapping("userlogin")
     public ModelAndView userlogin(ModelAndView mav, HttpSession session, @ModelAttribute User user){
+
+
+        String str=user.getPassword();
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(str.getBytes());
+            str=new BigInteger(1, md.digest()).toString(16);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+
+
+        user.setPassword(str);
         User u=userService.getUser(user);
+
         if (null!=u){
             session.setAttribute("loginuser",u);
             mav.setViewName("index");
@@ -69,14 +82,25 @@ public class UserController {
         return mav;
     }
 
+
     //ajax请求添加用户
     @ResponseBody
     @RequestMapping("adduser")
-    public void addUser(@RequestParam("user_id") Integer user_id, @RequestParam("user_name") String user_name, @RequestParam("password") String user_password, @RequestParam("user_login_name") String user_login_name, @RequestParam("user_department") String user_department, @RequestParam("user_gender") String user_gender, @RequestParam("user_tel") String user_tel, @RequestParam("user_phone") String user_phone,HttpSession session, HttpServletRequest request){
+    public void addUser(@RequestParam("user_id") Integer user_id, @RequestParam("user_name") String user_name, @RequestParam("user_password") String user_password, @RequestParam("user_login_name") String user_login_name, @RequestParam("user_department") String user_department, @RequestParam("user_gender") String user_gender, @RequestParam("user_tel") String user_tel, @RequestParam("user_phone") String user_phone,HttpSession session, HttpServletRequest request){
+        String str=user_password;   //加密操作
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(str.getBytes());
+            str=new BigInteger(1, md.digest()).toString(16);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+
         Date date =new Date();
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String userDate=sdf.format(date);
-        User user=new User(user_id,user_name,user_login_name,user_password,user_department,user_gender,user_tel,user_phone,"正常",userDate);
+        User user=new User(user_id,user_name,user_login_name,str,user_department,user_gender,user_tel,user_phone,"正常",userDate);
         User u= (User) session.getAttribute("loginuser");
         Integer userId=u.getUserid();
         String userName=u.getUname();
@@ -161,18 +185,11 @@ public class UserController {
     @ResponseBody
     @RequestMapping("GJseluser")
     public String findGJAll(@RequestParam("uname")String uname,@RequestParam("username")String username,@RequestParam("user_sex")String user_sex){
-        // System.out.println(uname);
-        // System.out.println(username);
-        // System.out.println(user_sex);
         User user=new User(uname,username,user_sex);
-        //Page<User> users=userService.gjSeleteUser(user,start,limit);
         List<User> users=userService.gjSeleteUser(user);
-        for(User u:users){
-            System.out.println(u.getUserid()+"\t"+u.getUsername());
-        }
         JSONArray datas=JSONArray.fromObject(users);
-        String totalCount="{totalCount:"+userService.getUsers().size()+"}";
-        String data="{totalCount:"+userService.getUsers().size()+",data:"+datas.toString()+"}";
+        String data="{totalCount:"+users.size()+",data:"+datas.toString()+"}";
+        System.out.println(data);
         return data;
     }
 }

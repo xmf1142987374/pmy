@@ -19,6 +19,4 @@ public interface UserService {
 
     public List<User> gjSeleteUser(User user);
 
-    public Page<User> gjSeleteUser(User user, Integer start, Integer limit);
-
 }

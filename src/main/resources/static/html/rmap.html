@@ -7,13 +7,83 @@
     <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
     <link rel="stylesheet" href="../extjs/resources/css/ext-all.css">
     <script type="text/javascript" src="../extjs/ext-all.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
     <style>
-        html,
-        body,
-        #container {
-            width: 100%;
+        html, body, #container {
             height: 100%;
-            margin: 0;
+            width: 100%;
+        }
+
+        .content-window-card {
+            position: relative;
+            box-shadow: none;
+            bottom: 0;
+            left: 0;
+            width: auto;
+            padding: 0;
+        }
+
+        .content-window-card p {
+            height: 2rem;
+        }
+
+        .custom-info {
+            border: solid 1px silver;
+        }
+
+        div.info-top {
+            position: relative;
+            background: none repeat scroll 0 0 #F9F9F9;
+            border-bottom: 1px solid #CCC;
+            border-radius: 5px 5px 0 0;
+        }
+
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+
+        div.info-middle {
+            font-size: 12px;
+            padding: 10px 6px;
+            line-height: 20px;
+        }
+
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+
+        span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
         }
     </style>
 </head>
@@ -26,7 +96,7 @@
     Ext.onReady(function () {
 //站点区域数据
         var site_towns = Ext.create('Ext.data.Store', {
-            fields: ["town_id","town_name","town_x_num","town_y_num","site_type"],
+            fields: ["town_id","town_name","town_x_num","town_y_num","site_type","site_name","site_desc"],
             proxy:{
                 type:"ajax",
                 url:"/selTowns",
@@ -99,11 +169,14 @@
                     var townx = site_towns.getAt(i).get("town_x_num");
                     var towny = site_towns.getAt(i).get("town_y_num");
                     var type = site_towns.getAt(i).get("site_type");
+                    var sitename=site_towns.getAt(i).get("site_name");
+                    var sitedesc=site_towns.getAt(i).get("site_desc");
                     var marker = new AMap.Marker({
                         position: new AMap.LngLat(townx, towny), // 经纬度对象
                         title: townname
                     });
-                    marker.setExtData(adCode);
+                    var arr=[adCode,sitename,sitedesc];
+                    marker.setExtData(arr);
                     if (type=="A类站点") {
                         marker.setIcon("/img/109.png");
                     }else if (type=="B类站点") {
@@ -124,6 +197,8 @@
                 }
             }
         });
+
+
         function mk() {
             for (var i = 0; i <markerList.length ; i++) {
                 var mk=markerList[i];
@@ -136,12 +211,60 @@
                 map.destroy()
                 center=mk.getPosition( )
                 createMap();
-                adCode = mk.getExtData();
+                adCode = mk.getExtData()[0];
                 map.setCenter(center);
                 map.add(mk);
                 initPro(adCode, depth);
             });
+
+            //实例化信息窗体
+            var title='<span style="font-size:11px;color:#F00;">'+mk.getTitle()+'</span>';
+                content = [];
+            content.push("<img src='http://tpc.googlesyndication.com/simgad/5843493769827749134'>站点名称:"+mk.getExtData()[1]);
+            content.push("<div style='height: 1px'></div>");
+            content.push("站点描述:"+mk.getExtData()[2]);
+            //构建自定义信息窗体
+            function createInfoWindow(title, content) {
+                var info = document.createElement("div");
+                info.className = "custom-info input-card content-window-card";
+                var top = document.createElement("div");
+                var titleD = document.createElement("div");
+                var closeX = document.createElement("img");
+                top.className = "info-top";
+                titleD.innerHTML = title;
+                top.appendChild(titleD);
+                info.appendChild(top);
+
+                // 定义中部内容
+                var middle = document.createElement("div");
+                middle.className = "info-middle";
+                middle.style.backgroundColor = 'white';
+                middle.innerHTML = content;
+                info.appendChild(middle);
+                return info;
+            }
+            var infoWindow = new AMap.InfoWindow({
+                isCustom: true,  //使用自定义窗体
+                content: createInfoWindow(title, content.join("<br/>")),
+                offset: new AMap.Pixel(16, -45)
+            });
+
+            mk.on("mouseover", function(){
+                infoWindow.open(map, mk.getPosition());
+            });
+
+            mk.on("mouseout", function(){
+                map.clearInfoWindow();
+            });
         }
+
+
+
+
+
+
+
+
     createMap();
     initPro(adCode, depth);
         map.setCenter(center);

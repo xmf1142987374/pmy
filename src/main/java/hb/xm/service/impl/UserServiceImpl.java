@@ -73,28 +73,4 @@ public class UserServiceImpl implements UserService {
             }
         });
     }
-
-    @Override
-    public Page<User> gjSeleteUser(User user, Integer start, Integer limit) {
-        Pageable pageable=new PageRequest(start,limit);
-        return userDao.findAll(new Specification<User>() {
-            @Override
-                public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Predicate pc = cb.conjunction();
-                if (user != null) {
-                    if (user.getUname() != null && !StringUtils.isEmpty(user.getUname())) {
-                        pc.getExpressions().add(cb.like(root.get("uname"), "%" + user.getUname() + "%"));
-                    }
-                    if (null != user.getUsername() && !StringUtils.isEmpty(user.getUsername())) {
-                        pc.getExpressions().add(cb.like(root.get("username"), "%" + user.getUsername() + "%"));
-                    }
-                    if (null != user.getUser_sex() && !StringUtils.isEmpty(user.getUser_sex())) {
-                        pc.getExpressions().add(cb.like(root.get("user_sex"), "%" + user.getUser_sex() + "%"));
-                    }
-                }
-                return pc;
-            }
-
-        },pageable);
-    }
 }

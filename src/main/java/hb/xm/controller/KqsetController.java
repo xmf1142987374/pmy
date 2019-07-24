@@ -27,7 +27,6 @@ public class KqsetController {
     public String findKqsets(@RequestParam("start")Integer start,@RequestParam("limit") Integer limit){
         List<Kqset> kqsets=kqsetService.getKqsetsfy(start,limit);
         JSONArray datas=JSONArray.fromObject(kqsets);
-        String totalCount="{totalCount:"+kqsetService.getKqsets().size()+"}";
         String data="{totalCount:"+kqsetService.getKqsets().size()+",data:"+datas.toString()+"}";
         return data;
     }

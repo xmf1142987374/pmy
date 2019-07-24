@@ -41,7 +41,6 @@ public class XwkqController {
     public String selSiteAreas(){
         List<Site> sites=siteService.getSiteAreas();
         JSONArray data= JSONArray.fromObject(sites);
-        System.out.println(data);
         return data.toString();
     }
 

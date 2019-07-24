@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -39,7 +40,6 @@ public class DeptController {
         JSONArray datas=JSONArray.fromObject(depts);
         String totalCount="{totalCount:"+deptService.getDept().size()+"}";
         String data="{totalCount:"+deptService.getDept().size()+",data:"+datas.toString()+"}";
-        System.out.println(data);
         return data;
     }
 
@@ -68,6 +68,14 @@ public class DeptController {
         for (int i = 0; i <data.length ; i++) {
             deptService.delectDept(data[i]);
         }
+    }
+
+    //请求部门
+
+    @RequestMapping("bm")
+    public ModelAndView bm(ModelAndView mav){
+        mav.setViewName("bm");
+        return mav;
     }
 
     //输出excel
