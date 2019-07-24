@@ -81,7 +81,7 @@ Ext.define("xw.gdgl", {
                     var win = new Ext.Window({
                         title: '添加工单',
                         width: 300,
-                        height: 240,
+                        height: 215,
                         frame: true
                     });
                     var form = new Ext.panel.Panel({
@@ -98,6 +98,7 @@ Ext.define("xw.gdgl", {
                             displayField: "warning_type",
                         }, {
                             xtype: "combo",
+                            id:"zd",
                             fieldLabel: "站点",
                             store: site_names,
                             queryMode: "local",
@@ -113,10 +114,6 @@ Ext.define("xw.gdgl", {
                             id: "wt",
                             fieldLabel: "问题来源",
 
-                        }, {
-                            xtype: "datefield",
-                            id: "jz",
-                            fieldLabel: "截止日期"
                         }],
                         buttons: [{
                             text: '添加',
@@ -125,7 +122,7 @@ Ext.define("xw.gdgl", {
                                 var site_id = Ext.getCmp("zd").value;
                                 var order_machine = Ext.getCmp("jx").value;
                                 var order_problem_from = Ext.getCmp("wt").value;
-                                var order_desc = Ext.getCmp("zt").value;
+                                var order_desc = Ext.getCmp("jz").value;
 
                                 Ext.Ajax.request({
                                     url: "addgdgl",
@@ -144,8 +141,6 @@ Ext.define("xw.gdgl", {
                                         order_machine: order_machine,
                                         order_problem_from: order_problem_from,
                                         order_desc: order_desc,
-
-
                                     }
                                 })
                             }
@@ -188,11 +183,7 @@ Ext.define("xw.gdgl", {
                 triggerAction: "all",
                 displayField: "site_name",
                 labelAlign: "right"
-            }, {
-                xtype: "datefield",
-                fieldLabel: "截止日期",
-                labelAlign: "right",
-            }, {
+            },{
                 xtype: "combo",
                 fieldLabel: "状态",
                 labelAlign: "right"
@@ -249,13 +240,7 @@ Ext.define("xw.gdgl", {
                 dataIndex: "order_problem_from",
                 flex: 3,
                 sortable: true
-            }, {
-                text: "截止日期",
-                align: "center",
-                dataIndex: "",
-                flex: 3,
-                sortable: true
-            }, {
+            },{
                 text: "状态",
                 align: "center",
                 dataIndex: "order_desc",

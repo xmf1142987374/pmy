@@ -43,8 +43,8 @@ Ext.define("gjgl.ycsjhzb", {
 //             }
 //         });
 //站点下拉数据
-        var ds = new Ext.data.Store({
-            fields: ["warning_id","site_location", "site_id", "warning_level", "warning_desc", "warning_state", "operate_time"],
+        var store = new Ext.data.Store({
+            fields: ["warning_id", "site_location", "site_id", "warning_level", "warning_desc", "warning_state", "operate_time"],
             proxy: {
                 type: "ajax",
                 url: 'findAll',
@@ -72,6 +72,21 @@ Ext.define("gjgl.ycsjhzb", {
             autoLoad: true
         });
 
+        //站点区域数据
+        var site_areas = Ext.create('Ext.data.Store', {
+            fields: ["site_location"],
+            proxy: {
+                type: "ajax",
+                url: "selSiteAreas",
+                reader: {
+                    type: "json",
+                    totalProperty: "totalCount",
+                    root: "data"
+                }
+            },
+            autoLoad: true
+        });
+
         //界面
         Ext.apply(this, {
             tbar: ["->", {
@@ -79,17 +94,18 @@ Ext.define("gjgl.ycsjhzb", {
                 fieldLabel: "告警分类",
                 labelAlign: "right",
                 store: gj,
+                width: 265,
                 queryMode: "local",
                 triggerAction: "all",
                 displayField: "warning_type",
-
             }, {
                 xtype: "combo",
                 fieldLabel: "乡镇",
+                labelAlign: "right",
+                store: site_areas,
                 queryMode: "local",
                 triggerAction: "all",
                 displayField: "site_location",
-                labelAlign: "right"
             }, {
                 xtype: "datefield",
                 fieldLabel: "时间范围",
@@ -103,11 +119,20 @@ Ext.define("gjgl.ycsjhzb", {
                     alert(11);
                 }
             }, {
-                text: "导出异常数据基本情况汇总表",
-                icon: "img/51.png"
-            }, {
-                text: "导出异常数据点位汇总表",
-                icon: "img/51.png"
+                text: "导出异常数据汇总表",
+                icon: "img/51.png",
+                handler:function(){
+                    Ext.Ajax.request({
+                        url:"addExcel",
+                        success:function(){
+                            store.load();
+                            alert("成功");
+                        },
+                        failure:function(){
+                            alert("失败");
+                        }
+                    })
+                }
             }],
 
             columns: [
@@ -121,7 +146,7 @@ Ext.define("gjgl.ycsjhzb", {
                     align: "center",
                     flex: 3,
                     sortable: true
-                },{
+                }, {
                     header: '站点名称',
                     align: "center",
                     dataIndex: "site_id",
@@ -152,18 +177,17 @@ Ext.define("gjgl.ycsjhzb", {
                     flex: 3,
                     sortable: true
                 }],
-            store: ds,
+            store: store,
             bbar: new Ext.PagingToolbar({
-                // store:store,
+                 store:store,
                 displayInfo: true,
                 displayMsg: "当前显示第{0}到{1}条记录,共有{1}条记录",
                 emptyMsg: "无记录"
             }),
-            // store:store
         });
 
         this.callParent(arguments);
-        ds.load({
+        store.load({
             params: {
                 start: 0,
                 limit: 20

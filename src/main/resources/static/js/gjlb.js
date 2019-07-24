@@ -18,14 +18,15 @@ Ext.define("gjgl.gjlb", {
             },
             autoLoad: true
         });
-        Ext.regModel("gjmodel", {
-            fields: [{
-                name: "gj"
-            }, {
-                name: "gjvalue"
-            }]
-        });
-        //下拉告警列表数据
+        // Ext.regModel("gjmodel", {
+        //     fields: [{
+        //         name: "gj"
+        //     }, {
+        //         name: "gjvalue"
+        //     }]
+        // });
+
+ //下拉告警列表数据
         var gj = Ext.create('Ext.data.Store', {
             fields: ["warning_type"],
             proxy: {
@@ -39,14 +40,15 @@ Ext.define("gjgl.gjlb", {
             },
             autoLoad: true
         });
-        Ext.regModel("zdmodel", {
-            fields: [{
-                name: "zd"
-            }, {
-                name: "zdvalue"
-            }]
-        });
-        //站点下拉数据
+        // Ext.regModel("zdmodel", {
+        //     fields: [{
+        //         name: "zd"
+        //     }, {
+        //         name: "zdvalue"
+        //     }]
+        // });
+
+ //站点下拉数据
         var site_names = Ext.create('Ext.data.Store', {
             fields: ['site_name'],
             proxy: {
@@ -59,6 +61,20 @@ Ext.define("gjgl.gjlb", {
                 }
             },
             autoLoad: true
+        });
+ //站点区域数据
+        var site_areas = Ext.create('Ext.data.Store', {
+            fields: ["site_location"],
+            proxy:{
+                type:"ajax",
+                url:"selSiteAreas",
+                reader:{
+                    type:"json",
+                    totalProperty:"totalCount",
+                    root:"data"
+                }
+            },
+            autoLoad:true
         });
 
         Ext.apply(this, {
@@ -101,10 +117,12 @@ Ext.define("gjgl.gjlb", {
 
             }, {
                 xtype: "combo",
-                width: 200,
-                fieldLabel: "乡镇",
                 labelAlign: "right",
-
+                fieldLabel: "乡镇",
+                store: site_areas,
+                queryMode: "local",
+                triggerAction: "all",
+                displayField:"site_location",
 
             },{
                 xtype: "combo",
@@ -171,8 +189,13 @@ Ext.define("gjgl.gjlb", {
                 sortable: true,
                 dataIndex: 'operate_time'
             }, {
-                text: '操作',
+                header: '操作',
                 xtype: "actioncolumn",
+                items:[{
+                    tooltip: '编辑',
+                    wideh:80,
+
+                }]
 
             }],
             store: store,
