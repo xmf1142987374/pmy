@@ -3,7 +3,6 @@
 
 Ext.define("xw.xjgz", {
     extend: Ext.grid.Panel,
-    id: "xjgz",
     frame: true,
     initComponent: function () {
 
@@ -21,7 +20,6 @@ Ext.define("xw.xjgz", {
 //数据store
         var pages = 4;   // 设置你想要的每页显示条数
         var store = Ext.create('Ext.data.Store', {
-            id: "xjgz",
             fields: ["sets_id", "site_type", "valid_time", "log_cycle", "log_count", "valid_start_time", "valid_end_time"],
             proxy: {
                 type: "ajax",

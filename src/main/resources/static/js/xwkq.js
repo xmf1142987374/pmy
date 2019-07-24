@@ -4,7 +4,6 @@
 
 Ext.define("xw.xwkq",{
     extend:Ext.grid.Panel,
-    id:"xwkq",
     frame:true,
     initComponent:function () {
 
@@ -12,7 +11,6 @@ Ext.define("xw.xwkq",{
 //巡维考勤数据store
         var pages = 3;   // 设置你想要的每页显示条数
         var store= Ext.create('Ext.data.Store', {
-            id:"xwkq",
             fields:["site_location","site_name","uname","arrive_time","leave_time","is_vaild"],
             proxy:{
                 type:"ajax",

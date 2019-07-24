@@ -4,10 +4,7 @@
 
 Ext.define("mf.zd",{
     extend:Ext.grid.Panel,
-    id:"zd",
     frame:true,
-    // width:1350,
-    // height:650,
     initComponent:function(){
 
 

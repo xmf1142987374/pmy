@@ -12,7 +12,6 @@ Ext.define("mf.three", {
 
         var pages = 4; //每页显示的条数
         store = Ext.create('Ext.data.Store', {
-            id: "yhfy",
             fields: ["userid", "uname", "user_dept", "username", "password", "user_sex", "user_tel", "user_phone", "user_state","create_time"],
             proxy: {
                 type: "ajax",
@@ -297,68 +296,7 @@ Ext.define("mf.three", {
                         }
                     })
                 }
-            }, /*{
-                text: "修改密码",
-                icon: "img/56.png",
-                handler: function () {
-                    var win = new Ext.Window({
-                        title: '修改密码',
-                        width: 300,
-                        height: 200,
-                        frame: true
-                    });
-                    var form = new Ext.panel.Panel({
-                        border: false,
-                        frame: true,
-                        layout: "form",
-                        items: [{
-                            xtype: "textfield",
-                            inputType: 'password',
-                            id: "password1",
-                            fieldLabel: "新密码"
-                        }, {
-                            xtype: "textfield",
-                            inputType: 'password',
-                            id: "password2",
-                            fieldLabel: "重新输入新密码"
-                        }],
-                        buttons: [{
-                            text: '确定',
-                            handler: function () {
-                                var password1 = Ext.getCmp("password1").value;
-                                var password2 = Ext.getCmp("password2").value;
-                                if (password1 == password2) {
-                                    Ext.Ajax.request({
-                                        url: "updateUserPas",
-                                        type: "post",
-                                        success: function () {
-                                            alert("修改成功,请重新登录");
-                                            store.load();
-                                            win.close();
-                                        },
-                                        failure: function () {
-                                            alert("失败");
-                                        },
-                                        params: {
-                                            password1: password1,
-                                            password2: password2
-                                        }
-                                    })
-                                } else {
-                                    alert("密码不一致");
-                                }
-                            }
-                        }, {
-                            text: "取消",
-                            handler: function () {
-                                win.close();
-                            }
-                        }]
-                    });
-                    win.add(form);
-                    win.show();
-                }
-            },*/ {
+            }, {
                 text: "刷新",
                 handler:function(){
                     store.reload();
@@ -392,20 +330,6 @@ Ext.define("mf.three", {
                     var uname=Ext.getCmp("u_xm").value;
                     var username=Ext.getCmp("u_zh").value;
                     var user_sex=Ext.getCmp("u_xb").value;
-                    // store = Ext.create('Ext.data.Store', {
-                    //     fields: ["userid", "uname", "user_dept", "username", "password", "user_sex", "user_tel", "user_phone", "user_state","create_time"],
-                    //     proxy: {
-                    //         type: "ajax",
-                    //         url: "GJseluser",
-                    //         reader: {
-                    //             type: "json",
-                    //             totalProperty: "totalCount",
-                    //             root: "data"
-                    //         }
-                    //     },
-                    //     pageSize: pages,
-                    //     autoLoad: false
-                    // });
                     store.proxy.url="GJseluser";
                     store.load({
                         params:{
@@ -426,26 +350,6 @@ Ext.define("mf.three", {
                         });
 
                     });
-                        console.log(store);
-                        console.log(store.proxy);
-                    // Ext.Ajax.request({
-                    //     url:"GJseluser",
-                    //     type:"post",
-                    //     success:function(){
-                    //         alert("查询成功");
-                    //         store.reload();
-                    //         //store.load();
-                    //         //win.close();
-                    //     },
-                    //     failure:function(){
-                    //         alert("查询失败");
-                    //     },
-                    //     params:{
-                    //         uname : uname,
-                    //         username : username,
-                    //         user_sex : user_sex
-                    //     }
-                    // })
                 }
             }],
             selType: "checkboxmodel",

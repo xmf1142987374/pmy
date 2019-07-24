@@ -18,13 +18,6 @@ Ext.define("gjgl.gjlb", {
             },
             autoLoad: true
         });
-        // Ext.regModel("gjmodel", {
-        //     fields: [{
-        //         name: "gj"
-        //     }, {
-        //         name: "gjvalue"
-        //     }]
-        // });
 
  //下拉告警列表数据
         var gj = Ext.create('Ext.data.Store', {
@@ -40,13 +33,7 @@ Ext.define("gjgl.gjlb", {
             },
             autoLoad: true
         });
-        // Ext.regModel("zdmodel", {
-        //     fields: [{
-        //         name: "zd"
-        //     }, {
-        //         name: "zdvalue"
-        //     }]
-        // });
+
 
  //站点下拉数据
         var site_names = Ext.create('Ext.data.Store', {

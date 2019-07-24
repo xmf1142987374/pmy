@@ -12,7 +12,6 @@ Ext.define("site.kqjl",{
 // 考勤纪录数据store
         var pages = 1;   // 设置你想要的每页显示条数
         var store= Ext.create('Ext.data.Store', {
-            id:"xwkq",
             fields:["uname","uname","arrive_time","leave_time","is_vaild"],
             proxy:{
                 type:"ajax",
