@@ -17,7 +17,7 @@ Ext.define("mf.zd",{
             fields:["site_id","site_name","site_location","site_type","site_desc","site_pic","town_x_num","town_y_num","uname","user_tel"],
             proxy:{
                 type:"ajax",
-                url:"selsite",
+                url:"selSite",
                 reader:{
                     type:"json",
                     totalProperty:"totalCount",
@@ -55,29 +55,49 @@ Ext.define("mf.zd",{
                         items:[{
                             xtype:"textfield",
                             id:"id",
-                            fieldLabel:"部门id"
+                            fieldLabel:"站点编号"
                         },{
                             xtype:"textfield",
                             id:"name",
-                            fieldLabel:"部门名称"
+                            fieldLabel:"站点名称"
+                        },{
+                            xtype:"textfield",
+                            id:"dz",
+                            fieldLabel:"站点地址"
+                        },{
+                            xtype:"textfield",
+                            id:"lx",
+                            fieldLabel:"站点类型"
                         },{
                             xtype:"textfield",
                             id:"ms",
-                            fieldLabel:"部门描述"
+                            fieldLabel:"站点描述"
                         },{
                             xtype:"textfield",
-                            id:"zt",
-                            fieldLabel:"部门状态"
+                            id:"jcy",
+                            fieldLabel:"片区巡查员"
+                        },{
+                            xtype:"textfield",
+                            id:"lxfs",
+                            fieldLabel:"联系方式"
+                        },{
+                            xtype:"textfield",
+                            id:"tp",
+                            fieldLabel:"前期施工情景"
                         }],
                         buttons:[{
                             text:'添加',
                             handler:function () {
-                                var dep_id=Ext.getCmp("id").value;
-                                var dep_name=Ext.getCmp("name").value;
-                                var dep_desc=Ext.getCmp("ms").value;
-                                var dep_state=Ext.getCmp("zt").value;
+                                var site_id=Ext.getCmp("id").value;
+                                var site_name=Ext.getCmp("name").value;
+                                var site_location=Ext.getCmp("dz").value;
+                                var site_type=Ext.getCmp("lx").value;
+                                var site_desc=Ext.getCmp("ms").value;
+                                var dep_state=Ext.getCmp("jcy").value;
+                                var dep_state=Ext.getCmp("lxfs").value;
+                                var dep_state=Ext.getCmp("tp").value;
                                 Ext.Ajax.request({
-                                    url:"adddept",
+                                    url:"addsite",
                                     type:"post",
                                     success:function(){
                                         alert("成功");
@@ -88,8 +108,8 @@ Ext.define("mf.zd",{
                                         alert("失败");
                                     },
                                     params:{
-                                        dep_id : dep_id,
-                                        dep_name : dep_name,
+                                        site_id : site_id,
+                                        site_name : site_name,
                                         dep_desc : dep_desc,
                                         dep_state : dep_state
                                     }
@@ -225,13 +245,13 @@ Ext.define("mf.zd",{
                 text:"照片",
                 dataIndex:"site_pic",
                 align:"center",
-                flex:1,
+                flex:2,
                 sortable:true
             },{
                 text:"站点编号",
                 dataIndex:"site_id",
                 align:"center",
-                flex:3,
+                flex:2,
                 sortable:true
             },{
                 text:"站点名称",
@@ -266,13 +286,13 @@ Ext.define("mf.zd",{
             },{
                 text:"经度",
                 align:"center",
-                flex:1,
+                flex:2,
                 dataIndex:"town_x_num",
                 sortable:true
             },{
                 text:"纬度",
                 align:"center",
-                flex:1,
+                flex:2,
                 dataIndex:"town_y_num",
                 sortable:true
             }],

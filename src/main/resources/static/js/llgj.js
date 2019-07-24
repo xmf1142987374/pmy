@@ -17,7 +17,7 @@ Ext.define("mf.ll",{
             fields:["site_id","site_name","site_type","warning_type","warning_max","warning_min"],
             proxy:{
                 type:"ajax",
-                url:"selwarning",
+                url:"selWarning",
                 reader:{
                     type:"json",
                     totalProperty:"totalCount",
