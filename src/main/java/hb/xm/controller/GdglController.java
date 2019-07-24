@@ -7,10 +7,12 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class GdglController {
 
     //添加工单
     @ResponseBody
-    @RequestMapping("addgdgl")
+    @RequestMapping(value = "addgdgl")
     public void addGdgl(@RequestParam("order_name") String order_name, @RequestParam("site_id") String site_id, @RequestParam("order_machine") String order_machine,
                         @RequestParam("order_problem_from") String order_problem_from, @RequestParam("order_desc") String order_desc) {
         Gdgl gdgl = new Gdgl();

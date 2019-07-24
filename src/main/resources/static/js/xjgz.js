@@ -57,6 +57,21 @@ Ext.define("xw.xjgz", {
             autoLoad:true
         });
 
+  //站点区域数据
+        var site_areas = Ext.create('Ext.data.Store', {
+            fields: ["site_location"],
+            proxy:{
+                type:"ajax",
+                url:"selSiteAreas",
+                reader:{
+                    type:"json",
+                    totalProperty:"totalCount",
+                    root:"data"
+                }
+            },
+            autoLoad:true
+        });
+
         //界面
         Ext.apply(this, {
             tbar: [{
@@ -64,8 +79,13 @@ Ext.define("xw.xjgz", {
                 icon: "img/15.png",
             }, "->", {
                 xtype: "combo",
+                labelAlign: "right",
                 fieldLabel: "乡镇",
-                labelAlign: "right"
+                store: site_areas,
+                queryMode: "local",
+                triggerAction: "all",
+                displayField:"site_location",
+
             }, {
                 xtype: "combo",
                 fieldLabel: "站点",
