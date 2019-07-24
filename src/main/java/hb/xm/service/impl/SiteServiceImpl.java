@@ -27,4 +27,14 @@ public class SiteServiceImpl implements SiteService {
     public List<Site> getSiteByName(String sitename) {
         return siteDao.getSiteByName(sitename);
     }
+
+    @Override
+    public List<Site> getSitefy(Integer start, Integer limit) {
+        return siteDao.getSitefy(start,limit);
+    }
+
+    @Override
+    public List<Site> getSites() {
+        return siteDao.findAll();
+    }
 }
