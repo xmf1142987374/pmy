@@ -298,6 +298,7 @@ Ext.onReady(function () {
                                             id: id.id,
                                             layout: "fit",
                                             items: [new mf.zd()]
+                                            // html:"<iframe src='zds' style='width: 100%;height: 100%'></iframe>"
                                         });
                                         break;
                                     case "22":

@@ -4,6 +4,7 @@
 
 Ext.define("mf.zd",{
     extend:Ext.grid.Panel,
+    id:"zdss",
     frame:true,
     initComponent:function(){
 
@@ -32,6 +33,21 @@ Ext.define("mf.zd",{
             }
         });
 
+        //站点类型下拉数据
+        var  site_types = Ext.create('Ext.data.Store', {
+            fields: ["site_type"],
+            proxy:{
+                type:"ajax",
+                url:"selSiteType",
+                reader:{
+                    type:"json",
+                    totalProperty:"totalCount",
+                    root:"data"
+                }
+            },
+            autoLoad:true
+        });
+
 
         //界面
         Ext.apply(this,{
@@ -45,9 +61,10 @@ Ext.define("mf.zd",{
                         height:300,
                         frame:true
                     });
-                    var form= new Ext.panel.Panel({
+                    var form= new Ext.form.Panel({
                         border:false,
                         frame:true,
+                        fileUpload:true,
                         layout:"form",
                         items:[{
                             xtype:"textfield",
@@ -62,9 +79,13 @@ Ext.define("mf.zd",{
                             id:"dz",
                             fieldLabel:"站点地址"
                         },{
-                            xtype:"textfield",
+                            xtype:"combo",
                             id:"lx",
-                            fieldLabel:"站点类型"
+                            fieldLabel:"站点类型",
+                            store:site_types,
+                            queryMode:"local",
+                            triggerAction:"all",
+                            displayField:"site_type"
                         },{
                             xtype:"textfield",
                             id:"ms",
@@ -78,9 +99,10 @@ Ext.define("mf.zd",{
                             id:"lxfs",
                             fieldLabel:"联系方式"
                         },{
-                            xtype:"textfield",
+                            xtype:"filefield",
+                            name:"fname",
                             id:"tp",
-                            fieldLabel:"前期施工情景"
+                            fieldLabel:"前期施工"
                         }],
                         buttons:[{
                             text:'添加',
@@ -90,27 +112,50 @@ Ext.define("mf.zd",{
                                 var site_location=Ext.getCmp("dz").value;
                                 var site_type=Ext.getCmp("lx").value;
                                 var site_desc=Ext.getCmp("ms").value;
-                                var dep_state=Ext.getCmp("jcy").value;
-                                var dep_state=Ext.getCmp("lxfs").value;
-                                var dep_state=Ext.getCmp("tp").value;
-                                Ext.Ajax.request({
-                                    url:"addsite",
-                                    type:"post",
-                                    success:function(){
-                                        alert("成功");
-                                        store.load();
-                                        win.close();
-                                    },
-                                    failure:function(){
-                                        alert("失败");
-                                    },
-                                    params:{
+                                var uname=Ext.getCmp("jcy").value;
+                                var user_tel=Ext.getCmp("lxfs").value;
+                                var site_pic=Ext.getCmp("tp").value;
+                                console.log(site_pic);
+                                form.getForm().submit({
+                                    clientValidation: true,
+                                    url: 'addsite',
+                                    params: {
                                         site_id : site_id,
                                         site_name : site_name,
-                                        dep_desc : dep_desc,
-                                        dep_state : dep_state
+                                        site_location : site_location,
+                                        site_type : site_type,
+                                        site_desc : site_desc,
+                                        uname : uname,
+                                        user_tel : user_tel
+                                    },
+                                    failure: function(form, action) {
+                                       store.load();
+                                           win.close();
                                     }
+
                                 })
+                                // Ext.Ajax.request({
+                                //     url:"addsite",
+                                //     type:"post",
+                                //     success:function(){
+                                //         alert("成功");
+                                //         store.load();
+                                //         win.close();
+                                //     },
+                                //     failure:function(){
+                                //         alert("失败");
+                                //     },
+                                //     params:{
+                                //         // site_id : site_id,
+                                //         // site_name : site_name,
+                                //         // site_location : site_location,
+                                //         // site_type : site_type,
+                                //         // site_desc : site_desc,
+                                //         // uname : uname,
+                                //         // user_tel : user_tel,
+                                //         site_pic : site_pic
+                                //     }
+                                // })
                             }
                         },{
                             text:"取消",
@@ -126,7 +171,7 @@ Ext.define("mf.zd",{
                 text:"修改",
                 icon:"img/50.png",
                 handler:function(){
-                    var selectdata=Ext.getCmp("bm").getSelectionModel().getSelection();
+                    var selectdata=Ext.getCmp("zdss").getSelectionModel().getSelection();
                     //console.log(selectdata[0].data.dep_id);
 
                     if(selectdata.length>1){
@@ -215,7 +260,7 @@ Ext.define("mf.zd",{
                 text:"删除",
                 icon:"img/15.png",
                 handler:function(){
-                    var selectdata=Ext.getCmp("zd").getSelectionModel().getSelection();
+                    var selectdata=Ext.getCmp("zdss").getSelectionModel().getSelection();
                     var data=new Array();
                     for (var i = 0; i <selectdata.length ; i++) {
                         data.push(selectdata[i].data.site_id);
@@ -239,8 +284,34 @@ Ext.define("mf.zd",{
             }],
             selType:"checkboxmodel",
             columns:[{
+                /*xtype:"box",
+                width : 50,
+                height : 30,
+                autoEl : {
+                    id:'myId',
+                    tag : 'img', // 指定为img标签
+                    src : 'src\\main\\resources\\static\\siteimg'+"site_pic" // 指定url路径
+                },*/
+                //text:"照片",
+                /*dataIndex:new Ext.Viewport({
+                    items : [{
+                        xtype : 'box', // 或者xtype: 'component',
+                        width : 50, // 图片宽度
+                        height : 20, // 图片高度
+                        autoEl : {
+                            id:'myId',
+                            tag : 'img', // 指定为img标签
+                            src : "http://localhost/siteimg/06b20bc0a08647748f1c61ca2eb50571.gif"// 指定url路径
+                        }
+
+                    }]
+                })*/
                 text:"照片",
                 dataIndex:"site_pic",
+                renderer :function(value){
+                    //var src="siteimg"+value;
+                    return "<img src='siteimg/"+value+"'style='width: 100px; height: 66px'/>";
+                },
                 align:"center",
                 flex:2,
                 sortable:true
@@ -260,6 +331,12 @@ Ext.define("mf.zd",{
                 text:"站点类型",
                 align:"center",
                 dataIndex:"site_type",
+                flex:2,
+                sortable:true
+            },{
+                text:"站点地址",
+                align:"center",
+                dataIndex:"site_location",
                 flex:2,
                 sortable:true
             },{

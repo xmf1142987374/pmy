@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class SiteServiceImpl implements SiteService {
@@ -37,4 +38,15 @@ public class SiteServiceImpl implements SiteService {
     public List<Site> getSites() {
         return siteDao.findAll();
     }
+
+    @Override
+    public void addSite(Site site) {
+        siteDao.save(site);
+    }
+
+    @Override
+    public void deleteSite(Integer site_id) {
+        siteDao.deleteById(site_id);
+    }
+
 }

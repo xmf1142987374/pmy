@@ -11,7 +11,7 @@ import java.util.List;
 public class Site implements Serializable {
     @Id
     @Column(name = "SITE_ID")
-    private String site_id;//站点id
+    private Integer site_id;//站点id
     @Column(name = "SITE_NAME")
     private String site_name;//站点名称
     @Column(name = "SITE_LOCATION")
@@ -27,7 +27,7 @@ public class Site implements Serializable {
     public Site() {
     }
 
-    public Site(String site_id, String site_name, String site_location, String site_type, String site_desc, String site_pic) {
+    public Site(Integer site_id, String site_name, String site_location, String site_type, String site_desc, String site_pic) {
         this.site_id = site_id;
         this.site_name = site_name;
         this.site_location = site_location;
@@ -38,11 +38,11 @@ public class Site implements Serializable {
 
 
 
-    public String getSite_id() {
+    public Integer getSite_id() {
         return site_id;
     }
 
-    public void setSite_id(String site_id) {
+    public void setSite_id(Integer site_id) {
         this.site_id = site_id;
     }
 
