@@ -3,9 +3,13 @@ Ext.define("gjgl.gjlb", {
     extend: 'Ext.grid.Panel',
     id: 'gjlb',
     frame: true,
+
     initComponent: function () {
-        var store = new Ext.data.Store({
-            fields: ["warning_id","site_location","warning_type", "site_id", "warning_level", "warning_desc", "is_valid", "warning_state", "operate_time", "cz"],
+
+        var store;
+        var pages = 4; //每页显示的条数
+        store = new Ext.data.Store({
+            fields: ["warning_id","site_id","site_location", "warning_type", "site_name", "warning_level", "warning_desc", "is_valid", "warning_state", "operate_time", "cz"],
             proxy: {
                 type: 'ajax',
                 url: 'findAll',
@@ -16,10 +20,18 @@ Ext.define("gjgl.gjlb", {
                     root: 'data'
                 }
             },
-            autoLoad: true
+            pageSize: pages,
+            autoLoad: false
         });
 
- //下拉告警列表数据
+        store.load({
+            params: {
+                start: 0,
+                limit: pages
+            }
+        });
+
+        //下拉告警列表数据
         var gj = Ext.create('Ext.data.Store', {
             fields: ["warning_type"],
             proxy: {
@@ -35,9 +47,23 @@ Ext.define("gjgl.gjlb", {
         });
 
 
- //站点下拉数据
+        //站点下拉数据
         var site_names = Ext.create('Ext.data.Store', {
             fields: ['site_name'],
+            proxy: {
+                type: "ajax",
+                url: "selSiteNames",
+                reader: {
+                    type: "json",
+                    totalProperty: "totalCount",
+                    root: "data"
+                }
+            },
+            autoLoad: true
+        });
+        //乡镇站点区域数据
+        var site_areas = Ext.create('Ext.data.Store', {
+            fields: ["town_name"],
             proxy: {
                 type: "ajax",
                 url: "selSiteAreas",
@@ -48,20 +74,6 @@ Ext.define("gjgl.gjlb", {
                 }
             },
             autoLoad: true
-        });
- //站点区域数据
-        var site_areas = Ext.create('Ext.data.Store', {
-            fields: ["site_location"],
-            proxy:{
-                type:"ajax",
-                url:"selSiteAreas",
-                reader:{
-                    type:"json",
-                    totalProperty:"totalCount",
-                    root:"data"
-                }
-            },
-            autoLoad:true
         });
 
         Ext.apply(this, {
@@ -109,9 +121,9 @@ Ext.define("gjgl.gjlb", {
                 store: site_areas,
                 queryMode: "local",
                 triggerAction: "all",
-                displayField:"site_location",
+                displayField: "town_name",
 
-            },{
+            }, {
                 xtype: "combo",
                 fieldLabel: "站点",
                 store: site_names,
@@ -151,10 +163,10 @@ Ext.define("gjgl.gjlb", {
                 header: '乡镇名',
                 sortable: true,
                 dataIndex: 'site_location'
-            },{
+            }, {
                 header: '站点名称',
                 sortable: true,
-                dataIndex: 'site_id'
+                dataIndex: 'site_name'
             }, {
                 header: '告警级别',
                 sortable: true,
@@ -178,28 +190,23 @@ Ext.define("gjgl.gjlb", {
             }, {
                 header: '操作',
                 xtype: "actioncolumn",
-                items:[{
+                items: [{
                     tooltip: '编辑',
-                    wideh:80,
+                    wideh: 80,
 
                 }]
 
             }],
             store: store,
             bbar: new Ext.PagingToolbar({
-                pageSize: 20,
                 store: store,
                 displayInfo: true,
-                displayMsg: '当前显示第{0}条到第{1}条记录，总共有{2}条记录',
+                displayMsg: '当前显示第{0}条到第{1}条记录，总共有{1}条记录',
                 emptyMsg: '无记录'
-            })
+            }),
+            store: store
         });
         this.callParent(arguments);
-        store.load({
-            params: {
-                start: 0,
-                limit: 20
-            }
-        });
+
     }
 });

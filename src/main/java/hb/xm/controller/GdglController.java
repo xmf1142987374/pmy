@@ -2,45 +2,78 @@
 package hb.xm.controller;
 
 import hb.xm.entity.Gdgl;
+import hb.xm.entity.Sbb;
+import hb.xm.entity.Site;
 import hb.xm.service.GdglService;
+import hb.xm.service.SbbService;
+import hb.xm.service.SiteService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class GdglController {
     @Autowired
     private GdglService gdglService;
+    @Autowired
+    private SiteService siteService;
+    @Autowired
+    private SbbService sbbService;
+
 
     @ResponseBody//查询
     @RequestMapping("all")
-    public String findAll() {
-        List<Gdgl> gdgls = gdglService.getGdgl();
-        JSONArray data = new JSONArray();
-        data = JSONArray.fromObject(gdgls);
-        return data.toString();
+    public String findAll(@RequestParam("start") Integer start, @RequestParam("limit") Integer limit) {
+        List<Gdgl> gdgls = gdglService.getgjlbfy(start, limit); //分页
+        List<Site> sites = siteService.getSiteAreas();
+        List<Sbb> sbbs = sbbService.getSbb();
+        JSONArray datas = new JSONArray();
+        for (int i = 0; i < gdgls.size(); i++) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject = JSONObject.fromObject(gdgls.get(i));
+            for (Site site : sites) {
+                if (site.getSite_id().toString().equals(gdgls.get(i).getSite_id().toString())) {
+                    jsonObject.put("site_name", site.getSite_name());
+                }
+            }
+            for (Sbb sbb : sbbs) {
+                if (sbb.getSite_id().toString().equals(gdgls.get(i).getSite_id().toString())) {
+                    jsonObject.put("machine_name", sbb.getMachine_name());
+                }
+            }
+            datas.add(jsonObject);
+        }
+        String data = "{totalCount:" + gdglService.getGdgl().size() + ",data:" + datas.toString() + "}";
+        return data;
     }
 
     //添加工单
     @ResponseBody
     @RequestMapping(value = "addgdgl")
-    public void addGdgl(@RequestParam("order_name") String order_name, @RequestParam("site_id") String site_id, @RequestParam("order_machine") String order_machine,
-                        @RequestParam("order_problem_from") String order_problem_from, @RequestParam("order_desc") String order_desc) {
+    public void addGdgl(@RequestParam("order_name") String order_name,
+                        @RequestParam("site_name") String site_name,
+                        @RequestParam("order_machine") String order_machine,
+                        @RequestParam("order_problem_from") String order_problem_from) {
         Gdgl gdgl = new Gdgl();
+        Site site = new Site();
+        Integer s_id = null;
+        List<Gdgl> gdgls = gdglService.getGdgl();
+        List<Site> sites = siteService.getSites();
+        for (Site s : sites) {
+            if (s.getSite_name().equals(site_name)) {
+                s_id = s.getSite_id();
+            }
+        }
         gdgl.setOrder_name(order_name);
-        gdgl.setSite_id(site_id);
         gdgl.setOrder_machine(order_machine);
         gdgl.setOrder_problem_from(order_problem_from);
-        gdgl.setOrder_desc(order_desc);
+        gdgl.setSite_id(s_id);
         gdglService.addGdgl(gdgl);
     }
 

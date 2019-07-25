@@ -1,50 +1,15 @@
 //异常数据汇总表
-
-
 Ext.define("gjgl.ycsjhzb", {
     extend: Ext.grid.Panel,
     id: "gjgl",
     frame: true,
+
     initComponent: function () {
 
-//下拉框模型
-//         var zq = Ext.create('Ext.data.Store', {
-//             fields: ['zq', 'zqvalue'],
-//             data : [
-//                 {"zq":"每周", "zqvalue":"每周"},
-//                 {"zq":"半个月", "zqvalue":"半个月"},
-//                 {"zq":"每月", "zqvalue":"每月"}
-//                 //...
-//             ]
-//         });
-
-//数据store
-//         var pages = 4;   // 设置你想要的每页显示条数
-//         var store= Ext.create('Ext.data.Store', {
-//             id:"xx",
-//             fields:["sets_id","site_type","valid_time","log_cycle","log_count","valid_start_time","valid_end_time"],
-//             proxy:{
-//                 type:"ajax",
-//                 //url:"selkqsets",
-//                 reader:{
-//                     type:"json",
-//                     totalProperty:"totalCount",
-//                     root:"data"
-//                 }
-//             },
-//             pageSize:pages,
-//             autoLoad:false
-//         });
-//
-//         store.load({
-//             params:{
-//                 start:0,
-//                 limit:pages
-//             }
-//         });
-//站点下拉数据
-        var store = new Ext.data.Store({
-            fields: ["warning_id", "site_location", "site_id", "warning_level", "warning_desc", "warning_state", "operate_time"],
+        var store;
+        var pages = 4; //每页显示的条数
+        store = new Ext.data.Store({
+            fields: ["warning_id", "site_location", "site_name", "warning_level", "warning_desc", "warning_state", "operate_time"],
             proxy: {
                 type: "ajax",
                 url: 'findAll',
@@ -54,7 +19,8 @@ Ext.define("gjgl.ycsjhzb", {
                     root: "data"
                 }
             },
-            autoLoad: true
+            pageSize: pages,
+            autoLoad: false
         });
 
         //下拉告警列表数据
@@ -72,9 +38,9 @@ Ext.define("gjgl.ycsjhzb", {
             autoLoad: true
         });
 
-        //站点区域数据
+        //乡镇站点区域数据
         var site_areas = Ext.create('Ext.data.Store', {
-            fields: ["site_location"],
+            fields: ["town_name"],
             proxy: {
                 type: "ajax",
                 url: "selSiteAreas",
@@ -85,6 +51,12 @@ Ext.define("gjgl.ycsjhzb", {
                 }
             },
             autoLoad: true
+        });
+        store.load({
+            params: {
+                start: 0,
+                limit: pages
+            }
         });
 
         //界面
@@ -105,7 +77,7 @@ Ext.define("gjgl.ycsjhzb", {
                 store: site_areas,
                 queryMode: "local",
                 triggerAction: "all",
-                displayField: "site_location",
+                displayField: "town_name",
             }, {
                 xtype: "datefield",
                 fieldLabel: "时间范围",
@@ -121,14 +93,14 @@ Ext.define("gjgl.ycsjhzb", {
             }, {
                 text: "导出异常数据汇总表",
                 icon: "img/51.png",
-                handler:function(){
+                handler: function () {
                     Ext.Ajax.request({
-                        url:"addExcel",
-                        success:function(){
+                        url: "addExcel",
+                        success: function () {
                             store.load();
                             alert("成功");
                         },
-                        failure:function(){
+                        failure: function () {
                             alert("失败");
                         }
                     })
@@ -142,14 +114,14 @@ Ext.define("gjgl.ycsjhzb", {
                     dataIndex: "warning_id"
                 }, {
                     header: '乡镇名',
-                    dataIndex: 'site_location',
+                    dataIndex: 'town_name',
                     align: "center",
                     flex: 3,
                     sortable: true
                 }, {
                     header: '站点名称',
                     align: "center",
-                    dataIndex: "site_id",
+                    dataIndex: "site_name",
                     flex: 3,
                     sortable: true
                 }, {
@@ -179,19 +151,15 @@ Ext.define("gjgl.ycsjhzb", {
                 }],
             store: store,
             bbar: new Ext.PagingToolbar({
-                 store:store,
+                store: store,
                 displayInfo: true,
                 displayMsg: "当前显示第{0}到{1}条记录,共有{1}条记录",
                 emptyMsg: "无记录"
             }),
+            store: store
         });
 
         this.callParent(arguments);
-        store.load({
-            params: {
-                start: 0,
-                limit: 20
-            }
-        });
+
     }
 })

@@ -20,10 +20,15 @@ public class GdglServiceImpl implements GdglService {
         return gdglDao.findAll();
     }
 
-     @Override//添加
-     public void addGdgl(Gdgl gdgl) {
-         gdglDao.save(gdgl);
-     }
+    @Override//添加
+    public void addGdgl(Gdgl gdgl) {
+        gdglDao.save(gdgl);
+    }
+
+    @Override
+    public List<Gdgl> getgjlbfy(Integer start, Integer limit) {
+        return gdglDao.getgdglfy(start, limit);
+    }
 
     @Override//删除
     public void deleteGdgl(Integer order_id) {

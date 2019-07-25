@@ -6,7 +6,7 @@ import javax.persistence.*;
 //工单管理
 @Entity
 @Table(name = "iotp_order")
-public class Gdgl {
+public class  Gdgl {
     @Id
     @Column(name = "order_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,7 @@ public class Gdgl {
     private String order_name;
 
     @Column(name = "site_id ")//站点
-    private String site_id;
+    private Integer site_id;
 
     // @Column(name = "machine_name  ")//设备名称
     // private String machine_name;
@@ -35,7 +35,7 @@ public class Gdgl {
 
     }
 
-    public Gdgl(Integer order_id, String order_name, String site_id, String order_machine, String order_problem_from, String order_desc) {
+    public Gdgl(Integer order_id, String order_name, Integer site_id, String order_machine, String order_problem_from, String order_desc) {
         this.order_id = order_id;
         this.order_name = order_name;
         this.site_id = site_id;
@@ -60,11 +60,11 @@ public class Gdgl {
         this.order_name = order_name;
     }
 
-    public String getSite_id() {
+    public Integer getSite_id() {
         return site_id;
     }
 
-    public void setSite_id(String site_id) {
+    public void setSite_id(Integer site_id) {
         this.site_id = site_id;
     }
 
