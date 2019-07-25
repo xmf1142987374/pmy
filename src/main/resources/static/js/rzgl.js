@@ -12,7 +12,7 @@ Ext.define("mf.rz",{
 
 
 
-        var pages=4; //每页显示的条数
+        var pages=20; //每页显示的条数
         var store=Ext.create('Ext.data.Store',{
             id:"rzfy",
             fields:["log_type","user_name","log_desc","user_id","log_time","user_ip","is_success"],
@@ -47,8 +47,14 @@ Ext.define("mf.rz",{
                 },
                 icon:"img/57.png"
             }],
-            selType:"checkboxmodel",
+            // selType:"checkboxmodel",
             columns:[{
+                xtype: 'rownumberer',
+                align: 'center',
+                renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
+                    return rowIndex + 1;
+                }
+            },{
                 text:"操作者id",
                 dataIndex:"user_id",
                 align:"center",

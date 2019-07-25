@@ -23,6 +23,7 @@
                 $(".site_desc").text(sitemssg[0].site_desc);
                 $(".town_x_num").text(sitemssg[0].town_x_num);
                 $(".town_y_num").text(sitemssg[0].town_y_num);
+                $(".site_pic").attr("src","../siteimg/"+sitemssg[0].site_pic);
             },
             failure:function () {
                 alert("失败")
@@ -34,7 +35,8 @@
     })
 </script>
 <body>
-<div style="height: 300px">放图片</div>
+<div style="width: 600px;height: 300px;margin: 0 auto"><img class="site_pic" src="" style="width: 600px; height: 300px"></div>
+<br>
 <table style="width: 600px;margin: 0 auto" class="table table-hover table-bordered table-responsive">
     <tr>
         <td colspan="2" class=" col-lg-2 col-xs-2 col-md-2 col-sm-2">站点类型:</td>

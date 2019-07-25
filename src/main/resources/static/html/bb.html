@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../extjs/resources/css/ext-all.css">
+    <script type="text/javascript" src="../extjs/ext-all.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+<!--    <script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+<!--    <script type="text/javascript" src="../extjs/example-data.js"></script>-->
+<!--    <script type="text/javascript" src="../extjs/Column2.js"></script>-->
+</head>
+<script type="text/javascript">
+
+    Ext.onReady(function(){
+
+
+
+
+
+        Ext.define('WeatherPoint', {
+            extend: 'Ext.data.Model',
+            fields: ['temperature', 'date']
+        });
+        var store=Ext.create('Ext.data.Store', {
+
+            storeId:'simpsonsStore',
+            fields:['time', 'scount'],
+            data:{'data':[
+                    { 'time': '2019-01-01', "scount":"10.0"},
+                    { 'time': '2019-01-02', "scount":"52.2"},
+                    { 'time': '2019-01-03', "scount":"33.4"},
+                    { 'time': '2019-01-04', "scount":"23.5"}
+                ]},
+            proxy: {
+                type: 'memory',
+                reader: {
+                    type: 'json',
+                    root: 'data'
+                }
+            }
+        });
+        var chart=Ext.create('Ext.chart.Chart', {
+            width: 400,
+            height: 300,
+            store: store,
+            axes: [
+                {
+                    title: '水流量',
+                    type: 'Numeric',
+                    position: 'left',
+                    fields: ['scount'],
+                    minimum: 0,
+                    maximum: 60
+                },
+                {
+                    title: '日期',
+                    type: 'Category',
+                    position: 'bottom',
+                    fields: ['time'],
+                }
+            ],
+            series: [
+                {
+                    type: 'line',
+                    xField: 'time',
+                    yField: 'scount'
+                }
+            ]
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        Ext.create('Ext.container.Container', {
+            renderTo : Ext.getBody(),
+            layout : 'auto',
+            items : [{
+                        items:[new Ext.grid.Panel({
+                            frame:true,
+                            border:false,
+                            tbar: [{
+                                xtype: "combo",
+                                labelAlign: "right",
+                                width: 320,
+                                fieldLabel: "站点:",
+                            },"-","->", {
+                                text: '查询',
+                                icon: "../img/4.png",
+                            },{
+                                text: "导出异常数据汇总表",
+                                icon: "../img/51.png",
+                            }],
+                            columns:[{
+                                xtype: 'rownumberer',
+                                align: 'center',
+                                renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
+                                    return rowIndex + 1;
+                                }
+                            },{
+                                text:"时间",
+                                align:"center",
+                                dataIndex: 'time',
+                                flex:2
+                            },{
+                                text:"水流量",
+                                flex:1,
+                                dataIndex: 'scount',
+                                align:"center"
+                            },{
+                                flex:6
+                            }],
+                            store:store
+                        })],
+            },{
+                title:"图形报表",
+                items:[new Ext.panel.Panel({
+                    tabr:[{
+                        text:"折线图"
+                    },{
+                        text:"柱状图"
+                    }],
+                })],
+                collapsible:true,
+                items:chart
+            }]
+        });
+
+
+
+
+
+
+    })
+</script>
+<body>
+
+</body>
+</html>

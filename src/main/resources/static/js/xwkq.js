@@ -49,7 +49,7 @@ Ext.define("xw.xwkq",{
 
 //站点区域数据
         var site_areas = Ext.create('Ext.data.Store', {
-            fields: ["site_location"],
+            fields: ["town_name"],
             proxy:{
                 type:"ajax",
                 url:"selSiteAreas",
@@ -71,7 +71,7 @@ Ext.define("xw.xwkq",{
                 store:site_areas,
                 queryMode:"local",
                 triggerAction:"all",
-                displayField:"site_location",
+                displayField:"town_name",
                 labelAlign:"right"
             },{
                 xtype:"combo",
@@ -111,6 +111,12 @@ Ext.define("xw.xwkq",{
             }],
             selType:"checkboxmodel",
             columns:[{
+                xtype: 'rownumberer',
+                align: 'center',
+                renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
+                    return rowIndex + 1;
+                }
+            },{
                 text:"所属区域",
                 dataIndex:"site_location",
                 align:"center",

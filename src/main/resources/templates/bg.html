@@ -5,14 +5,207 @@
     <title>Title</title>
     <link rel="stylesheet" th:href="@{extjs/resources/css/ext-all.css}">
     <script type="text/javascript" th:src="@{extjs/ext-all.js}"></script>
-    <script type="text/javascript" th:src="@{js/map.js}"></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
 </head>
 <script type="text/javascript">
 
     Ext.onReady(function(){
-      new mf.test();
+
+
+        // new Ext.container.Viewport({
+        //     renderTo:Ext.getBody(),
+        //     layout: "border",
+        //     items:[{
+        //         items:[new Ext.grid.Panel({
+        //             frame:true,
+        //             border:false,
+        //             tbar: [{
+        //                 xtype: "combo",
+        //                 labelAlign: "right",
+        //                 width: 320,
+        //                 fieldLabel: "站点:",
+        //             },"-","->", {
+        //                 text: '查询',
+        //                 icon: "img/4.png",
+        //             },{
+        //                 text: "导出异常数据汇总表",
+        //                 icon: "img/51.png",
+        //             }],
+        //             columns:[{
+        //                 xtype: 'rownumberer',
+        //                 align: 'center',
+        //                 renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
+        //                     return rowIndex + 1;
+        //                 }
+        //             },{
+        //                 text:"时间",
+        //                 align:"center",
+        //                 dataIndex: 'time',
+        //                 flex:2
+        //             },{
+        //                 text:"水流量",
+        //                 flex:1,
+        //                 dataIndex: 'scount',
+        //                 align:"center"
+        //             },{
+        //                 flex:6
+        //             }],
+        //             store:store
+        //         })],
+        //         region: "north",
+        //
+        //     },{
+        //         region: "south",
+        //         html:"xxx",
+        //
+        //
+        //     }]
+        // })
+        // var store=Ext.create('Ext.data.Store', {
+        //
+        //     storeId:'simpsonsStore',
+        //     fields:['time', 'scount'],
+        //     data:{'items':[
+        //             { 'time': '2019-01-01', "scount":"10.0"},
+        //         ]},
+        //     proxy: {
+        //         type: 'memory',
+        //         reader: {
+        //             type: 'json',
+        //             root: 'items'
+        //         }
+        //     }
+        // });
+        //
+        //
+        // // Ext.create('Ext.container.Container', {
+        // //     border:false,
+        // //     renderTo : Ext.getBody(),
+        // //     layout : 'accordion' ,
+        // //     multi:true,
+        // //     items : [{
+        // //         hideCollapseTool:true,
+        // //         items:[new Ext.grid.Panel({
+        // //             frame:true,
+        // //             border:false,
+        // //             tbar: [{
+        // //                 xtype: "combo",
+        // //                 labelAlign: "right",
+        // //                 width: 320,
+        // //                 fieldLabel: "站点:",
+        // //             },"-","->", {
+        // //                 text: '查询',
+        // //                 icon: "img/4.png",
+        // //             },{
+        // //                 text: "导出异常数据汇总表",
+        // //                 icon: "img/51.png",
+        // //             }],
+        // //             columns:[{
+        // //                 xtype: 'rownumberer',
+        // //                 align: 'center',
+        // //                 renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
+        // //                     return rowIndex + 1;
+        // //                 }
+        // //             },{
+        // //                 text:"时间",
+        // //                 align:"center",
+        // //                 dataIndex: 'time',
+        // //                 flex:2
+        // //             },{
+        // //                 text:"水流量",
+        // //                 flex:1,
+        // //                 dataIndex: 'scount',
+        // //                 align:"center"
+        // //             },{
+        // //                 flex:6
+        // //             }],
+        // //             store:store
+        // //         })],
+        // //     },{
+        // //
+        // //         html:"xxxxx"
+        // //     }]
+        // // });
+
+
+
+
+        Ext.create('Ext.data.Store', {
+            field:["src","caption"],
+            id:'imagesStore',
+            data: [
+                { src:'http://www.sencha.com/img/20110215-feat-drawing.png', caption:'图画 & 图表' },
+            ]
+        });
+
+        var imageTpl = new Ext.XTemplate(
+            '<tpl for=".">',
+            '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+            '<img src="{src}" />',
+            '<br/><span>{caption}</span>',
+            '</div>',
+            '</tpl>'
+        );
+
+        Ext.create('Ext.view.View', {
+            store: Ext.data.StoreManager.lookup('imagesStore'),
+            tpl: imageTpl,
+            renderTo: Ext.getBody()
+        });
+
+
+
+
+        Ext.create('Ext.container.Container', {
+            renderTo : Ext.getBody(),
+            layout : 'auto',
+            items : [{
+                        items:[new Ext.grid.Panel({
+                            frame:true,
+                            border:false,
+                            tbar: [{
+                                xtype: "combo",
+                                labelAlign: "right",
+                                width: 320,
+                                fieldLabel: "站点:",
+                            },"-","->", {
+                                text: '查询',
+                                icon: "img/4.png",
+                            },{
+                                text: "导出异常数据汇总表",
+                                icon: "img/51.png",
+                            }],
+                            columns:[{
+                                xtype: 'rownumberer',
+                                align: 'center',
+                                renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
+                                    return rowIndex + 1;
+                                }
+                            },{
+                                text:"时间",
+                                align:"center",
+                                dataIndex: 'time',
+                                flex:2
+                            },{
+                                text:"水流量",
+                                flex:1,
+                                dataIndex: 'scount',
+                                align:"center"
+                            },{
+                                flex:6
+                            }],
+                            store:store
+                        })],
+            },{
+                collapsible:true,
+                html : 'This is Second Component'
+            }]
+        });
+
     })
 </script>
 <body>
+
 </body>
 </html>

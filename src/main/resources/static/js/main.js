@@ -121,12 +121,7 @@ Ext.onReady(function () {
                     root: {
                         text: "巡维管理",
                         children: [
-                            //     {
-                            //     icon:"../img/13.png",
-                            //     text:"巡维计划",
-                            //     id:"4",
-                            //     leaf:true
-                            // },
+
                             {
                                 icon: "../img/2.png",
                                 text: "考勤规则设置",
@@ -162,18 +157,18 @@ Ext.onReady(function () {
                             if (id.id == "yxbb" || id.id == "dlsbbb") {
                                 return;
                             } else {
-                                if (Ext.getCmp(id.id)) {
-                                    tabpanel.setActiveTab(Ext.getCmp(id.id));
-                                } else {
-                                    var t = tabpanel.add({
-                                        title: id.text,
-                                        closable: true,
-                                        id: id.id,
-                                        html: id.text + "页面",
-                                        // items:[new mf.three()]
-                                    });
-                                    tabpanel.setActiveTab(t);
+                                switch (id.id) {
+                                    case "9":
+                                        var t = tabpanel.add({
+                                            title: id.text,
+                                            closable: true,
+                                            id: id.id,
+                                            layout: "fit",
+                                            html: "<iframe src='html/bb.html' width='100%' height='100%'></iframe>"
+                                        });
+                                        break;
                                 }
+                                tabpanel.setActiveTab(t);
                             }
 
                         }

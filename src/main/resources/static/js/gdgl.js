@@ -191,8 +191,7 @@ Ext.define("xw.gdgl", {
             columns: [{
                 xtype: 'rownumberer',
                 align: 'center',
-                renderer: function (value, cellmeta, record,
-                                    rowIndex, columnIndex, store) {
+                renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
                     return rowIndex + 1;
                 }
             }, {

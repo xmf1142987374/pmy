@@ -1,9 +1,11 @@
 package hb.xm.controller;
 //请求考勤规则
 import hb.xm.entity.Site;
+import hb.xm.entity.Town;
 import hb.xm.entity.User;
 import hb.xm.entity.Xwkq;
 import hb.xm.service.SiteService;
+import hb.xm.service.TownService;
 import hb.xm.service.UserService;
 import hb.xm.service.XwkqService;
 import net.sf.json.JSONArray;
@@ -25,6 +27,8 @@ public class XwkqController {
     private SiteService siteService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private TownService townService;
 
     //ajax请求查询站点名
     @ResponseBody
@@ -39,7 +43,7 @@ public class XwkqController {
     @ResponseBody
     @RequestMapping("selSiteAreas")
     public String selSiteAreas(){
-        List<Site> sites=siteService.getSiteAreas();
+        List<Town> sites=townService.getTowns();
         JSONArray data= JSONArray.fromObject(sites);
         return data.toString();
     }

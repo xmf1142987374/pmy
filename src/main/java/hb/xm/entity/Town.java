@@ -23,6 +23,7 @@ public class Town {
     private String site_type;
     private String site_name;
     private String site_desc;
+    private String site_pic;
 
     public Town() {
     }
@@ -41,6 +42,14 @@ public class Town {
 
     public void setSite_name(String site_name) {
         this.site_name = site_name;
+    }
+
+    public String getSite_pic() {
+        return site_pic;
+    }
+
+    public void setSite_pic(String site_pic) {
+        this.site_pic = site_pic;
     }
 
     public String getSite_desc() {

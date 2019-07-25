@@ -7,16 +7,6 @@ Ext.define("gjgl.ycsjhzb", {
     frame: true,
     initComponent: function () {
 
-//下拉框模型
-//         var zq = Ext.create('Ext.data.Store', {
-//             fields: ['zq', 'zqvalue'],
-//             data : [
-//                 {"zq":"每周", "zqvalue":"每周"},
-//                 {"zq":"半个月", "zqvalue":"半个月"},
-//                 {"zq":"每月", "zqvalue":"每月"}
-//                 //...
-//             ]
-//         });
 
 //数据store
 //         var pages = 4;   // 设置你想要的每页显示条数
@@ -137,6 +127,12 @@ Ext.define("gjgl.ycsjhzb", {
 
             columns: [
                 {
+                    xtype: 'rownumberer',
+                    align: 'center',
+                    renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
+                        return rowIndex + 1;
+                    }
+                },{
                     header: "告警id",
                     hidden: true,
                     dataIndex: "warning_id"

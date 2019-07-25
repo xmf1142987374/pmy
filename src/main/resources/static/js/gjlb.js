@@ -126,7 +126,7 @@ Ext.define("gjgl.gjlb", {
                 labelAlign: "right"
             }, {
                 text: '查询',
-                icon: "img/15.png",
+                icon: "img/4.png",
             }],
             border: true,
             forceFit: true,// 列表宽度自动适应

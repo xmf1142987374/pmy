@@ -96,7 +96,7 @@
     Ext.onReady(function () {
 //站点区域数据
         var site_towns = Ext.create('Ext.data.Store', {
-            fields: ["town_id","town_name","town_x_num","town_y_num","site_type","site_name","site_desc"],
+            fields: ["town_id","town_name","town_x_num","town_y_num","site_type","site_name","site_desc","site_pic"],
             proxy:{
                 type:"ajax",
                 url:"/selTowns",
@@ -171,11 +171,12 @@
                     var type = site_towns.getAt(i).get("site_type");
                     var sitename=site_towns.getAt(i).get("site_name");
                     var sitedesc=site_towns.getAt(i).get("site_desc");
+                    var sitepic=site_towns.getAt(i).get("site_pic");
                     var marker = new AMap.Marker({
                         position: new AMap.LngLat(townx, towny), // 经纬度对象
                         title: townname
                     });
-                    var arr=[adCode,sitename,sitedesc];
+                    var arr=[adCode,sitename,sitedesc,sitepic];
                     marker.setExtData(arr);
                     if (type=="A类站点") {
                         marker.setIcon("/img/109.png");
@@ -220,7 +221,7 @@
             //实例化信息窗体
             var title='<span style="font-size:11px;color:#F00;">'+mk.getTitle()+'</span>';
                 content = [];
-            content.push("<img src='http://tpc.googlesyndication.com/simgad/5843493769827749134'>站点名称:"+mk.getExtData()[1]);
+            content.push("<img src='../siteimg/"+mk.getExtData()[3]+"' style='width:100px;height: 66px '>站点名称:"+mk.getExtData()[1]);
             content.push("<div style='height: 1px'></div>");
             content.push("站点描述:"+mk.getExtData()[2]);
             //构建自定义信息窗体

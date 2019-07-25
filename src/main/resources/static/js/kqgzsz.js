@@ -179,6 +179,12 @@ Ext.define("xw.kqgz",{
             }],
             selType:"checkboxmodel",
             columns:[{
+                xtype: 'rownumberer',
+                align: 'center',
+                renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
+                    return rowIndex + 1;
+                }
+            },{
                 text:"id",
                 dataIndex:"sets_id",
                 hidden:true

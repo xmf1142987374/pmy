@@ -46,6 +46,12 @@ Ext.define("site.kqjl",{
         Ext.apply(this,{
             selType:"checkboxmodel",
             columns:[{
+                xtype: 'rownumberer',
+                align: 'center',
+                renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
+                    return rowIndex + 1;
+                }
+            },{
                 text:"人员",
                 align:"center",
                 dataIndex:"uname",

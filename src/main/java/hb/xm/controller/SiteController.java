@@ -35,6 +35,7 @@ public class SiteController {
             jsonObject=JSONObject.fromObject(sites.get(i));
             for(Town town:towns){
                 if (sites.get(i).getSite_location().equals(town.getTown_name())){
+                    jsonObject.put("site_pic",town.getSite_pic());
                     jsonObject.put("town_x_num",town.getTown_x_num());
                     jsonObject.put("town_y_num",town.getTown_y_num());
                 }

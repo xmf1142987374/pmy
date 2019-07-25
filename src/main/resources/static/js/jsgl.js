@@ -230,6 +230,12 @@ Ext.define("mf.js",{
             }],
             selType:"checkboxmodel",
             columns:[{
+                xtype: 'rownumberer',
+                align: 'center',
+                renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
+                    return rowIndex + 1;
+                }
+            },{
                 text:"角色编号",
                 dataIndex:"role_id",
                 align:"center",

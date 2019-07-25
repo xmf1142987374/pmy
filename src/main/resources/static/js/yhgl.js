@@ -354,6 +354,12 @@ Ext.define("mf.three", {
             }],
             selType: "checkboxmodel",
             columns: [{
+                xtype: 'rownumberer',
+                align: 'center',
+                renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
+                    return rowIndex + 1;
+                }
+            },{
                 text: "工号",
                 dataIndex: "userid",
                 align: "center",
