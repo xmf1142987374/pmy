@@ -11,18 +11,18 @@ Ext.define("xw.gdgl", {
 //数据store
         var pages = 4;   // 设置你想要的每页显示条数
         var store = Ext.create('Ext.data.Store', {
-            fields: ["order_id", "order_name", "site_id", "order_machine", "order_problem_from", "order_desc"],
-            proxy: {
-                type: "ajax",
-                url: "all",
-                reader: {
-                    type: "json",
-                    totalProperty: "totalCount",
-                    root: "data"
-                }
-            },
-            pageSize: pages,
-            autoLoad: false
+                fields: ["order_id", "order_name","machine_name", "site_name", "order_machine", "order_problem_from", "order_desc"],
+                proxy: {
+                    type: "ajax",
+                    url: "all",
+                    reader: {
+                        type: "json",
+                        totalProperty: "totalCount",
+                        root: "data"
+                    }
+                },
+                pageSize: pages,
+                autoLoad: false
         });
 
         store.load({
@@ -36,7 +36,7 @@ Ext.define("xw.gdgl", {
             fields: ['site_name'],
             proxy: {
                 type: "ajax",
-                url: "selSiteAreas",
+                url: "selSiteNames",
                 reader: {
                     type: "json",
                     totalProperty: "totalCount",
@@ -108,10 +108,9 @@ Ext.define("xw.gdgl", {
                             text: '添加',
                             handler: function () {
                                 var order_name = Ext.getCmp("gd").value;
-                                var site_id = Ext.getCmp("zd").value;
+                                var site_name = Ext.getCmp("zd").value;
                                 var order_machine = Ext.getCmp("jx").value;
                                 var order_problem_from = Ext.getCmp("wt").value;
-                                var order_desc = Ext.getCmp("jz").value;
 
                                 Ext.Ajax.request({
                                     url: "addgdgl",
@@ -126,10 +125,9 @@ Ext.define("xw.gdgl", {
                                     },
                                     params: {
                                         order_name: order_name,
-                                        site_id: site_id,
+                                        site_name: site_name,
                                         order_machine: order_machine,
                                         order_problem_from: order_problem_from,
-                                        order_desc: order_desc,
                                     }
                                 })
                             }
@@ -206,14 +204,14 @@ Ext.define("xw.gdgl", {
                 sortable: true
             }, {
                 text: "站点",
-                dataIndex: "site_id",
+                dataIndex: "site_name",
                 align: "center",
                 flex: 3,
                 sortable: true
             }, {
                 text: "设备",
                 align: "center",
-                dataIndex: "",
+                dataIndex: "machine_name",
                 flex: 3,
                 sortable: true
             }, {
@@ -241,6 +239,7 @@ Ext.define("xw.gdgl", {
                 flex: 3,
                 sortable: true
             }],
+            store: store,
             bbar: new Ext.PagingToolbar({
                 store: store,
                 displayInfo: true,

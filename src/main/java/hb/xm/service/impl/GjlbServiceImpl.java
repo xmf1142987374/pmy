@@ -20,16 +20,18 @@ public class GjlbServiceImpl implements GjlbService{
 
 
 
-    // @Override
-    // public List<Gjlb> getgjlb(Integer start, Integer limit) {
-    //     return gjlbDao.getgjlb(start, limit);
-    // }
+     @Override
+     public List<Gjlb> getgjlbfy(Integer start, Integer limit) {
+         return gjlbDao.getgjlbfy(start, limit);
+     }
 
 
     @Override
     public void deleteGjlb(Integer warning_id) {
        gjlbDao.deleteById(warning_id);
     }
+
+
 
 
 }

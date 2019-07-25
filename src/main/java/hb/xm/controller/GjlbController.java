@@ -4,7 +4,7 @@ package hb.xm.controller;
 import hb.xm.entity.Gjlb;
 
 import hb.xm.entity.Site;
-import hb.xm.entity.User;
+
 import hb.xm.service.GjlbService;
 import hb.xm.service.SiteService;
 import net.sf.json.JSONArray;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+
 //告警列表数据处理
 @Controller
 public class GjlbController {
@@ -28,25 +29,27 @@ public class GjlbController {
     private GjlbService gjlbService;
     @Autowired
     private SiteService siteService;
+
     //ajax请求查询告警列表所有数据
     @ResponseBody
     @RequestMapping("findAll")
-    public String findAll() {
-        List<Gjlb> gjlbs = gjlbService.getGjlb();
+    public String findAll(@RequestParam("start") Integer start, @RequestParam("limit") Integer limit) {
+        List<Gjlb> gjlbs = gjlbService.getgjlbfy(start, limit);
         List<Site> sites = siteService.getSiteAreas();
-        JSONArray data = new JSONArray();
+        JSONArray datas = new JSONArray();
         for (int i = 0; i < gjlbs.size(); i++) {
             JSONObject jsonObject = new JSONObject();
             jsonObject = JSONObject.fromObject(gjlbs.get(i));
             for (Site site : sites) {
                 if (site.getSite_id().toString().equals(gjlbs.get(i).getSite_id().toString())) {
                     jsonObject.put("site_location", site.getSite_location());
+                    jsonObject.put("site_name", site.getSite_name());
                 }
             }
-            data.add(jsonObject);
+            datas.add(jsonObject);
         }
-        //String datas = "{totalCount:" + gjlbService.getGjlb().size() + ",data:" + data.toString() + "}";分页
-        return data.toString();
+        String data = "{totalCount:" + gjlbService.getGjlb().size() + ",data:" + datas.toString() + "}";//分页
+        return data;
     }
 
     //ajax请求删除告警列表选择数据
@@ -62,7 +65,7 @@ public class GjlbController {
     //输出excel
     @ResponseBody
     @RequestMapping("addExcel")
-    public void poiDept(){
+    public void poiDept() {
         HSSFWorkbook book = new HSSFWorkbook();
         HSSFSheet sheet = book.createSheet("数据汇总表.xlsx");
         HSSFRow row = sheet.createRow(0);
@@ -74,10 +77,10 @@ public class GjlbController {
         row.createCell(5).setCellValue("告警时间");
 
 
-        List<Gjlb> list=gjlbService.getGjlb();
+        List<Gjlb> list = gjlbService.getGjlb();
         List<Site> sites = siteService.getSiteAreas();
         for (int i = 0; i < sites.size(); i++) {
-            HSSFRow temp_row=sheet.createRow(i + 1);
+            HSSFRow temp_row = sheet.createRow(i + 1);
             temp_row.createCell(0).setCellValue(sites.get(i).getSite_location());
             temp_row.createCell(1).setCellValue(list.get(i).getSite_id());
             temp_row.createCell(2).setCellValue(list.get(i).getWarning_level());

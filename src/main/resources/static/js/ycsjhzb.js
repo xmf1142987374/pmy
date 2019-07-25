@@ -8,31 +8,6 @@ Ext.define("gjgl.ycsjhzb", {
     initComponent: function () {
 
 
-//数据store
-//         var pages = 4;   // 设置你想要的每页显示条数
-//         var store= Ext.create('Ext.data.Store', {
-//             id:"xx",
-//             fields:["sets_id","site_type","valid_time","log_cycle","log_count","valid_start_time","valid_end_time"],
-//             proxy:{
-//                 type:"ajax",
-//                 //url:"selkqsets",
-//                 reader:{
-//                     type:"json",
-//                     totalProperty:"totalCount",
-//                     root:"data"
-//                 }
-//             },
-//             pageSize:pages,
-//             autoLoad:false
-//         });
-//
-//         store.load({
-//             params:{
-//                 start:0,
-//                 limit:pages
-//             }
-//         });
-//站点下拉数据
         var store = new Ext.data.Store({
             fields: ["warning_id", "site_location", "site_id", "warning_level", "warning_desc", "warning_state", "operate_time"],
             proxy: {
@@ -64,7 +39,7 @@ Ext.define("gjgl.ycsjhzb", {
 
         //站点区域数据
         var site_areas = Ext.create('Ext.data.Store', {
-            fields: ["site_location"],
+            fields: ["town_name"],
             proxy: {
                 type: "ajax",
                 url: "selSiteAreas",
@@ -95,7 +70,7 @@ Ext.define("gjgl.ycsjhzb", {
                 store: site_areas,
                 queryMode: "local",
                 triggerAction: "all",
-                displayField: "site_location",
+                displayField: "town_name",
             }, {
                 xtype: "datefield",
                 fieldLabel: "时间范围",
@@ -127,12 +102,6 @@ Ext.define("gjgl.ycsjhzb", {
 
             columns: [
                 {
-                    xtype: 'rownumberer',
-                    align: 'center',
-                    renderer: function (value, cellmeta, record,rowIndex, columnIndex, store) {
-                        return rowIndex + 1;
-                    }
-                },{
                     header: "告警id",
                     hidden: true,
                     dataIndex: "warning_id"

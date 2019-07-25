@@ -57,7 +57,7 @@ Ext.define("xw.xjgz", {
 
   //站点区域数据
         var site_areas = Ext.create('Ext.data.Store', {
-            fields: ["site_location"],
+            fields: ["town_name"],
             proxy:{
                 type:"ajax",
                 url:"selSiteAreas",
@@ -82,7 +82,7 @@ Ext.define("xw.xjgz", {
                 store: site_areas,
                 queryMode: "local",
                 triggerAction: "all",
-                displayField:"site_location",
+                displayField:"town_name",
 
             }, {
                 xtype: "combo",
