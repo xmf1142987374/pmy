@@ -43,6 +43,11 @@ public class UserController {
         return mav;
     }
 
+    @RequestMapping("403")
+    public String forbidden(){
+        return "403";
+    }
+
     //ajax请求查询用户
     @ResponseBody
     @RequestMapping("seluser")
