@@ -140,6 +140,14 @@ public class SiteController {
 
         Site site=new Site(site_id,site_name,site_location,site_type,site_desc,nfileName);
         siteService.addSite(site);
-        System.out.println("上传成功");
+       // System.out.println("上传成功");
+    }
+
+    @ResponseBody
+    @RequestMapping("delsite")
+    public void deleteSite(@RequestParam("data") Integer [] data){
+        for (int i = 0; i <data.length ; i++){
+            siteService.deleteSite(data[i]);
+        }
     }
 }

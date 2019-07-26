@@ -102,7 +102,7 @@ Ext.define("mf.zd",{
                             xtype:"filefield",
                             name:"fname",
                             id:"tp",
-                            fieldLabel:"前期施工"
+                            fieldLabel:"前期施工图片"
                         }],
                         buttons:[{
                             text:'添加',
@@ -157,12 +157,11 @@ Ext.define("mf.zd",{
                     }else if(selectdata.length<1){
                         alert("请选择一个修改哟!");
                     }else{
-                        var d_id=selectdata[0].data.dep_id;
-                        var d_name=selectdata[0].data.dep_name;
-                        var d_desc=selectdata[0].data.dep_desc;
-                        var d_state=selectdata[0].data.dep_state;
-                        var c_user=selectdata[0].data.create_user;
-                        var c_time=selectdata[0].data.create_time;
+                        var site_id=selectdata[0].data.site_id;
+                        var site_name=selectdata[0].data.site_name;
+                        var site_location=selectdata[0].data.site_location;
+                        var site_type=selectdata[0].data.site_type;
+                        var site_desc=selectdata[0].data.site_desc;
                         var win=new Ext.Window({
                             title:'修改部门',
                             width:300,
@@ -176,24 +175,29 @@ Ext.define("mf.zd",{
                             items:[{
                                 xtype:"textfield",
                                 id:"id",
-                                fieldLabel:"部门id",
+                                fieldLabel:"站点编号",
                                 disabled:true,
-                                value:d_id
+                                value:site_id
                             },{
                                 xtype:"textfield",
                                 id:"name",
-                                fieldLabel:"部门名称",
-                                value:d_name
+                                fieldLabel:"站点名称",
+                                value:site_name
+                            },{
+                                xtype:"textfield",
+                                id:"dz",
+                                fieldLabel:"站点地址",
+                                value:site_location
+                            },{
+                                xtype:"textfield",
+                                id:"lx",
+                                fieldLabel:"站点类型",
+                                value:site_type
                             },{
                                 xtype:"textfield",
                                 id:"ms",
-                                fieldLabel:"部门描述",
-                                value:d_desc
-                            },{
-                                xtype:"textfield",
-                                id:"zt",
-                                fieldLabel:"部门状态",
-                                value:d_state
+                                fieldLabel:"站点描述",
+                                value:site_desc
                             }],
                             buttons:[{
                                 text:'确定修改',
