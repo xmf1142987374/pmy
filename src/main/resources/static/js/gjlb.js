@@ -9,7 +9,7 @@ Ext.define("gjgl.gjlb", {
         var store;
         var pages = 4; //每页显示的条数
         store = new Ext.data.Store({
-            fields: ["warning_id","site_id","site_location", "warning_type", "site_name", "warning_level", "warning_desc", "is_valid", "warning_state", "operate_time", "cz"],
+            fields: ["warning_id", "site_id", "site_location", "warning_type", "site_name", "warning_level", "warning_desc", "is_valid", "warning_state", "operate_time", "cz"],
             proxy: {
                 type: 'ajax',
                 url: 'findAll',
@@ -46,7 +46,6 @@ Ext.define("gjgl.gjlb", {
             autoLoad: true
         });
 
-
         //站点下拉数据
         var site_names = Ext.create('Ext.data.Store', {
             fields: ['site_name'],
@@ -76,6 +75,14 @@ Ext.define("gjgl.gjlb", {
             autoLoad: true
         });
 
+        var states =Ext.create(Ext.data.Store,{
+            fields:['machine_name'],
+            data:[
+                {"machine_name":"风机"},
+                {"machine_name":"水泵"}
+            ]
+        });
+
         Ext.apply(this, {
             tbar: [{
                 text: '无效告警',
@@ -92,7 +99,6 @@ Ext.define("gjgl.gjlb", {
                     for (var i = 0; i < selectdata.length; i++) {
                         data.push(selectdata[i].data.warning_id);
                     }
-
                     Ext.Ajax.request({
                         url: "delegjlb",
                         type: "post",
@@ -190,11 +196,87 @@ Ext.define("gjgl.gjlb", {
             }, {
                 header: '操作',
                 xtype: "actioncolumn",
+                align: "center",
                 items: [{
-                    tooltip: '编辑',
-                    wideh: 80,
+                    icon: "img/50.png",
+                    handler: function () {
+                        var selectdata = Ext.getCmp("gjlb").getSelectionModel().getSelection();
+                        console.log(selectdata)
+                        var warning_type = selectdata[0].data.warning_type;
+                        var site_name = selectdata[0].data.site_name;
+                        var warning_desc = selectdata[0].data.warning_desc;
 
-                }]
+                        var win = new Ext.Window({
+                            title: '添加工单',
+                            width: 300,
+                            height: 340,
+                            frame: true
+                        });
+                        var form = new Ext.panel.Panel({
+                            border: false,
+                            frame: true,
+                            layout: "form",
+                            items: [{
+                                xtype: "textfield",
+                                id: "gdmc",
+                                fieldLabel: "工单名称",
+                                value: warning_type,
+                            }, {
+                                xtype: "textfield",
+                                id: "zdmc",
+                                fieldLabel: "站点名称",
+                                value: site_name
+                            }, {
+                                xtype: "combo",
+                                id: "sb",
+                                fieldLabel: "设备",
+                                store: states,
+                                queryMode: "local",
+                                displayField: "machine_name"
+                            }, {
+                                xtype: "textarea",
+                                id: "wtms",
+                                fieldLabel: "问题描述",
+                                height: 150,
+                                value: warning_desc,
+                            }],
+                            buttons: [{
+                                text: '添加',
+                                handler: function () {
+                                    var warning_type=Ext.getCmp("gdmc").value;
+                                    var site_name=Ext.getCmp("zdmc").value;
+                                    var machine_name=Ext.getCmp("sb").value;
+                                    var warning_desc=Ext.getCmp("wtms").value;
+                                    Ext.Ajax.request({
+                                        url: "addgd",
+                                        type: "post",
+                                        success: function () {
+                                            alert("成功");
+                                            store.load();
+                                            win.close();
+                                        },
+                                        failure: function () {
+                                            alert("失败");
+                                        },
+                                        params: {
+                                            warning_type: warning_type,
+                                            site_name: site_name,
+                                            warning_desc: warning_desc,
+                                            machine_name:machine_name,
+                                        }
+                                    })
+                                }
+                            }, {
+                                text: "取消",
+                                handler: function () {
+                                    win.close();
+                                }
+                            }]
+                        })
+                        win.add(form);
+                        win.show();
+                    }
+                }],
 
             }],
             store: store,

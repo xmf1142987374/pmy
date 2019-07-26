@@ -2,9 +2,11 @@
 package hb.xm.controller;
 
 import hb.xm.entity.Gdgl;
+import hb.xm.entity.Gjlb;
 import hb.xm.entity.Sbb;
 import hb.xm.entity.Site;
 import hb.xm.service.GdglService;
+import hb.xm.service.GjlbService;
 import hb.xm.service.SbbService;
 import hb.xm.service.SiteService;
 import net.sf.json.JSONArray;
@@ -25,6 +27,8 @@ public class GdglController {
     private SiteService siteService;
     @Autowired
     private SbbService sbbService;
+    @Autowired
+    private GjlbService gjlbService;
 
 
     @ResponseBody//查询
@@ -74,6 +78,31 @@ public class GdglController {
         gdgl.setOrder_machine(order_machine);
         gdgl.setOrder_problem_from(order_problem_from);
         gdgl.setSite_id(s_id);
+        gdglService.addGdgl(gdgl);
+    }
+
+    //添加设备工单
+    @ResponseBody
+    @RequestMapping(value = "addgd")
+    public void addgd(@RequestParam("warning_type") String order_name,
+                      @RequestParam("site_name") String site_name,
+                      @RequestParam("machine_name") String order_machine,
+                      @RequestParam("warning_desc") String order_problem_from) {
+        Gdgl gdgl = new Gdgl();
+        Gjlb gjlb =new Gjlb();
+        Integer s_id = null;
+        List<Gdgl> gdgls = gdglService.getGdgl();
+        List<Gjlb> gjlbs = gjlbService.getGjlb();
+        List<Site> sites = siteService.getSites();
+        for (Site s : sites) {
+            if (s.getSite_name().equals(site_name)) {
+                s_id = s.getSite_id();
+            }
+        }
+        gdgl.setOrder_name(order_name);
+        gdgl.setOrder_machine(order_machine);
+        gdgl.setSite_id(s_id);
+        gdgl.setOrder_problem_from(order_problem_from);
         gdglService.addGdgl(gdgl);
     }
 

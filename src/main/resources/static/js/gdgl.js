@@ -61,6 +61,14 @@ Ext.define("xw.gdgl", {
             autoLoad: true
         });
 
+        var states =Ext.create(Ext.data.Store,{
+            fields:['machine_name'],
+            data:[
+                {"machine_name":"风机"},
+                {"machine_name":"水泵"}
+            ]
+        });
+
         //界面
         Ext.apply(this, {
             tbar: [{
@@ -93,16 +101,17 @@ Ext.define("xw.gdgl", {
                             queryMode: "local",
                             triggerAction: "all",
                             displayField: "site_name",
-
                         }, {
                             xtype: "combo",
                             id: "jx",
-                            fieldLabel: "检修设备"
+                            fieldLabel: "检修设备",
+                            store: states,
+                            queryMode: "local",
+                            displayField: "machine_name"
                         }, {
                             xtype: "textarea",
                             id: "wt",
                             fieldLabel: "问题来源",
-
                         }],
                         buttons: [{
                             text: '添加',
