@@ -252,7 +252,7 @@ Ext.define("mf.zd",{
                         url:"delsite",
                         type:"post",
                         success:function(){
-                            store.load();//添加之后重载数据 局部刷新
+                            store.reload();//添加之后重载数据 局部刷新
                             alert("删除成功");
                         },
                         failure:function(){
