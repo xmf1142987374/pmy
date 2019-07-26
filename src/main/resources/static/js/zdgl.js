@@ -9,7 +9,7 @@ Ext.define("mf.zd",{
     initComponent:function(){
 
 
-        var pages=4; //每页显示的条数
+        var pages=7; //每页显示的条数
         var store=Ext.create('Ext.data.Store',{
             id:"zdfy",
             fields:["site_id","site_name","site_location","site_type","site_desc","site_pic","town_x_num","town_y_num","uname","user_tel"],
@@ -134,28 +134,6 @@ Ext.define("mf.zd",{
                                     }
 
                                 })
-                                // Ext.Ajax.request({
-                                //     url:"addsite",
-                                //     type:"post",
-                                //     success:function(){
-                                //         alert("成功");
-                                //         store.load();
-                                //         win.close();
-                                //     },
-                                //     failure:function(){
-                                //         alert("失败");
-                                //     },
-                                //     params:{
-                                //         // site_id : site_id,
-                                //         // site_name : site_name,
-                                //         // site_location : site_location,
-                                //         // site_type : site_type,
-                                //         // site_desc : site_desc,
-                                //         // uname : uname,
-                                //         // user_tel : user_tel,
-                                //         site_pic : site_pic
-                                //     }
-                                // })
                             }
                         },{
                             text:"取消",

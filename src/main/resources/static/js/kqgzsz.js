@@ -59,6 +59,7 @@ Ext.define("xw.kqgz",{
                         frame:true
                     });
                     var form=new Ext.form.Panel({
+
                         border:false,
                         frame:true,
                         layout:"form",

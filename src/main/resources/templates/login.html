@@ -2,16 +2,45 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>环境治理设施智能管理系统</title>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{css/login.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css}">
 </head>
 <body>
-<h1 align="center">用户登录</h1>
-<form method="post" th:action="@{userlogin}">
-    <label>用户名</label><input type="text" name="username" placeholder="请输入用户名"/>
-    <br>
-    <label>密码</label><input type="password" name="password" placeholder="请输入密码"/>
-    <br>
-    <input type="submit" value="login"/>
-</form>
+
+
+<div>
+
+    <div class="be-content pren">
+        <div class="ioc_text">
+            <h3 align="center">管理系统</h3>
+        </div>
+        <div>
+            <form method="post" th:action="@{userlogin}">
+                <div class="br-content">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <input type="text" class="form-control" placeholder="用户名" name="username">
+                    </div>
+                    <p></p>
+
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-unlock-alt"></i></span>
+                        <input type="password" class="form-control" placeholder="密码" name="password">
+                    </div>
+                    <p></p>
+                    <div style="padding-top: 10px">
+                        <input type="submit" class="btn"  value="登录">
+                    </div>
+                    <br/>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
 </body>
 </html>

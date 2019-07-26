@@ -1,7 +1,7 @@
 Ext.onReady(function () {
 
 
-    Ext.create(Ext.container.Viewport, {
+   var viewport= Ext.create(Ext.container.Viewport, {
         layout: "border",
         items: [{
             region: "north",
@@ -156,7 +156,9 @@ Ext.onReady(function () {
                             var tabpanel = Ext.getCmp("tabpanel");
                             if (id.id == "yxbb" || id.id == "dlsbbb") {
                                 return;
-                            } else {
+                            } else if (Ext.getCmp(id.id)) {
+                                tabpanel.setActiveTab(Ext.getCmp(id.id));
+                            }else {
                                 switch (id.id) {
                                     case "9":
                                         var t = tabpanel.add({

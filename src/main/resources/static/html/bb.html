@@ -16,74 +16,146 @@
 
 
 
-
-
-        Ext.define('WeatherPoint', {
-            extend: 'Ext.data.Model',
-            fields: ['temperature', 'date']
-        });
-        var store=Ext.create('Ext.data.Store', {
-
-            storeId:'simpsonsStore',
-            fields:['time', 'scount'],
-            data:{'data':[
-                    { 'time': '2019-01-01', "scount":"10.0"},
-                    { 'time': '2019-01-02', "scount":"52.2"},
-                    { 'time': '2019-01-03', "scount":"33.4"},
-                    { 'time': '2019-01-04', "scount":"23.5"}
-                ]},
-            proxy: {
-                type: 'memory',
-                reader: {
-                    type: 'json',
-                    root: 'data'
+//站点区域数据
+        var  site_names = Ext.create('Ext.data.Store', {
+            fields: ["site_name"],
+            proxy:{
+                type:"ajax",
+                url:"/selSiteNames",
+                reader:{
+                    type:"json",
+                    totalProperty:"totalCount",
+                    root:"data"
                 }
-            }
+            },
+            autoLoad:true
         });
-        var chart=Ext.create('Ext.chart.Chart', {
-            width: 400,
+
+        var store= Ext.create('Ext.data.Store', {
+            fields: ['water_time', 'water_num'],
+            proxy: {
+                type: "ajax",
+                url: "",
+                reader: {
+                    type: "json",
+                    totalProperty: "totalCount",
+                    root: "data"
+                }
+
+            },
+
+            autoLoad:true
+
+        });
+
+
+        var chart1=Ext.create('Ext.chart.Chart', {
+            width: 500,
             height: 300,
+            animate: true,
             store: store,
             axes: [
                 {
-                    title: '水流量',
                     type: 'Numeric',
                     position: 'left',
-                    fields: ['scount'],
-                    minimum: 0,
-                    maximum: 60
+                    fields: ['water_num'],
+                    grid: true,
+                    minimum: 0
                 },
                 {
-                    title: '日期',
                     type: 'Category',
                     position: 'bottom',
-                    fields: ['time'],
+                    fields: ['water_time'],
                 }
             ],
             series: [
                 {
-                    type: 'line',
-                    xField: 'time',
-                    yField: 'scount'
+                    type: 'column',
+                    tips: {
+                        trackMouse: true,
+                        width: 140,
+                        height: 28,
+                        renderer: function(storeItem, item) {
+                            this.setTitle(storeItem.get('water_time') + '日: ' + storeItem.get('water_num')+'水流量');
+                        }
+                    },
+                    label: {
+                        display: 'insideEnd',
+                        field: 'water_num',
+                    },
+                    xField: 'water_time',
+                    yField: 'water_num'
                 }
             ]
         });
 
 
+        var chart2=Ext.create('Ext.chart.Chart', {
+            width: 500,
+            height: 300,
+            animate: true,
+            store: store,
+            axes: [
+                {
+                    type: 'Numeric',
+                    position: 'left',
+                    fields: ['water_num'],
+                    grid: true,
+                    minimum: 0
+                },
+                {
+                    type: 'Category',
+                    position: 'bottom',
+                    fields: ['water_time'],
+                }
+            ],
+            series: [
+                {
+                    type: 'line',
 
+                    axis: 'left',
+                    xField: 'water_time',
+                    yField: 'water_num',
+                    markerConfig: {
+                        type: 'cross',
+                        size: 4,
+                        radius: 4,
+                        'stroke-width': 0
+                    }
+                }
+            ]
+        });
+var panel=new Ext.panel.Panel({
+    autoScroll:true,
+    tbar:[{
+        icon:"../img/57.png",
+        text:"折线图",
+        handler:function () {
+            if (store.data.items.length!=0) {
+                chart1.hide();
+                chart2.show();
+            }else{
+                Ext.MessageBox.alert("没有数据")
+            }
+        }
+    },"--",{
+        id:"zzt",
+        icon:"../img/57.png",
+        text:"柱状图",
+        handler:function () {
+            if (store.data.items.length!=0) {
+                chart2.hide();
+                chart1.show();
+            }else{
+                Ext.MessageBox.alert("没有数据")
+            }
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    }],
+    items:[chart2,chart1]
+});
+chart2.hide();
+chart1.hide();
         Ext.create('Ext.container.Container', {
             renderTo : Ext.getBody(),
             layout : 'auto',
@@ -93,14 +165,49 @@
                             border:false,
                             tbar: [{
                                 xtype: "combo",
+                                id:"sname",
                                 labelAlign: "right",
                                 width: 320,
+                                store:site_names,
+                                queryMode:"local",
+                                triggerAction:"all",
+                                displayField:"site_name",
                                 fieldLabel: "站点:",
                             },"-","->", {
                                 text: '查询',
                                 icon: "../img/4.png",
+                                handler:function () {
+                                    var site_name=Ext.getCmp("sname").value;
+                                    store.proxy.url="/selWaters";
+                                    store.on("beforeload",function(){
+
+                                        Ext.apply(store.proxy.extraParams, {
+                                            site_name : site_name
+                                        });
+
+                                    });
+                                    store.load({
+                                        params:{
+                                            site_name : site_name
+                                        }
+                                    });
+                                    chart2.hide();
+                                    chart1.hide();
+                                    store.on("load",function(){
+
+                                        if (store.data.items.length!=0) {
+
+                                            chart1.show();
+                                        }else{
+                                            Ext.MessageBox.alert("没有数据")
+                                        }
+
+
+                                    });
+
+                                }
                             },{
-                                text: "导出异常数据汇总表",
+                                text: "导出图表",
                                 icon: "../img/51.png",
                             }],
                             columns:[{
@@ -112,12 +219,12 @@
                             },{
                                 text:"时间",
                                 align:"center",
-                                dataIndex: 'time',
+                                dataIndex: 'water_time',
                                 flex:2
                             },{
                                 text:"水流量",
                                 flex:1,
-                                dataIndex: 'scount',
+                                dataIndex: 'water_num',
                                 align:"center"
                             },{
                                 flex:6
@@ -126,15 +233,10 @@
                         })],
             },{
                 title:"图形报表",
-                items:[new Ext.panel.Panel({
-                    tabr:[{
-                        text:"折线图"
-                    },{
-                        text:"柱状图"
-                    }],
-                })],
+                items:panel,
                 collapsible:true,
-                items:chart
+
+
             }]
         });
 
