@@ -2,9 +2,13 @@ package hb.xm.controller;
 
 import hb.xm.common.Ip;
 import hb.xm.entity.Dept;
+import hb.xm.entity.Role;
+import hb.xm.entity.Role_User;
 import hb.xm.entity.User;
 import hb.xm.service.DeptService;
 import hb.xm.service.LogService;
+import hb.xm.service.RoleService;
+import hb.xm.service.Role_UserService;
 import net.sf.json.JSONArray;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -31,6 +35,10 @@ public class DeptController {
     private DeptService deptService;
     @Autowired
     private LogService logService;
+    @Autowired
+    private Role_UserService role_userService;
+    @Autowired
+    private RoleService roleService;
 
     //ajax请求查询部门
     @ResponseBody
@@ -73,8 +81,24 @@ public class DeptController {
     //请求部门
 
     @RequestMapping("bm")
-    public ModelAndView bm(ModelAndView mav){
-        mav.setViewName("bm");
+    public ModelAndView bm(ModelAndView mav,HttpSession session){
+        User user=(User) session.getAttribute("loginuser");
+        Integer ints=user.getUserid();
+        List<Role_User> rus=role_userService.getRoleUser();
+        List<Role> roles=roleService.getRole();
+        for(Role_User ru:rus){
+            if(ru.getUser_id().equals(ints)){
+                for(Role role:roles){
+                    if(ru.getRole_id().equals(role.getRole_id())){
+                        if(role.getRole_name().equals("超级管理员")){
+                            mav.setViewName("bm");
+                            return mav;
+                        }
+                    }
+                }
+            }
+        }
+        mav.setViewName("403");
         return mav;
     }
 
